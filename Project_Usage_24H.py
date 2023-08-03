@@ -10,9 +10,29 @@ from dotenv import load_dotenv
 import slack
 from googleapiclient.discovery import build
 from gspread_formatting import *
-
+from flask import Flask, request, make_response, Response
+import hashlib
+import hmac
 load_dotenv()
+app = Flask(__name__)
 
+@app.route('/slack/usage24h', methods=['POST'])
+def slack_usage24h():
+    # Validate the request from Slack
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    # Perform your GPU usage calculations
+    main()
+
+    return make_response("", 200)
 # Datadog credentials
 DD_SITE = os.environ.get("DD_SITE")
 DD_API_KEY = os.environ.get("DD_API_KEY")
@@ -353,4 +373,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
