@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "caramel-banner-394014",
+  "private_key_id": "c41e4524e3026e877f9050018663f184da681387",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDHnYdIzJCVME0t\nZ7qB4guirBRB+UP71TxmmHtvf8LlmAAqyC9B41YiB3lmnvG39KiSXKya8G2Cn3Xe\nrYoQxegtrS/jsDhXLDPQNusVf2XoHihjxQoWrOjvIwDjiG8J9kXVZnET2WY6yLdj\neukTQ9xtjy3JXTSojLqQ2uLSrqIC0q2oycR7Vx9rh8hUvfjoVZF5HvmqWYf5AYTg\n75aJj6/zBJdB/v9Chi12cz5SJk87zfcrCuEKboV95yU5NagYOoT6CQFAs62lp+P1\nrn7g238c8OFbx7vScztw4vX0uQWhbPQgScyTkqBelhkpCcoTE49j+HMH9sYQSdQ+\nn4xcgFgBAgMBAAECggEANwE+hR3xfVq4+ZkKuL2cLTAzyNYyGJPyt+aupNPU1cVj\nzmYpN4O4eVoL5u5Hd0RQqzwkR/GWi5b7OOgjEmomh2eguaIWdFb21Bo9/0eCwkqF\nILDsDcGJ0lOX7BrtVhZpudsnr6uJUwt6FUyKK0fY1svMdx9a4lMdGctnE10Rwarl\nNG/oQ6kEdDqwR7kAyjQOWCS+DdppGiwOet153qp+c+zHA1S8Ami2MOUnvrmF4w7R\nFElWewJFgOpvXJ+gaPU73rnItzFmAfHXPqkLZmpoSlbG3TEFZJ22G/+9GF4prAwv\ni+KocBd9dN/FcvBQnzkfFJk8UOg8BIBITqE/a44FLQKBgQD1ak2dFZTJyzdDmpCP\n1xnymHJg6R6GXxMZygbj+cXyZ0500ES6e5gODnudhy/D1f+BMKcj3bHfzU0VgYhS\nT9E4baeEUGhjBc/DzLQmtU7a+tlw3LejCMYzb+z1zttLIQ2p8xTJFXl1PLF+gIAB\npGuxdc2d3L7n5fpBlb63mG7HDwKBgQDQOYk6ac80Voq3hv+29c4Tp5nz6SDwCx9b\no5b+AMchYTHyTUVpvtNZsDAYYZdCtdjV52qhth4ga8BC2T7Vp3GNP0FjS4cU/h18\nI7NPEBC4iSJaFb0W6FYqhpy0xh6RX+XH6h/ffVy47WWc9XzRf0JZmoafNr/fAWGU\nLX+vFutv7wKBgFvpyVG4wHXnTzZZkCTfGc+6+rOC+7S1rPCusm/1nwZPXJnxWpxB\nJ8yz7eYsuF3vKvdWonKTWEgKmwEf909kp2Yr415xwva7OXoKk7ofk33+Dyvu7jP4\nWErxc10IcSctJPHuoW1CRq/64DsRo196Ff9rsGucPj+Z6WVg0QHv7CVPAoGABSWm\n8r6y1IRfIXJA1/DziyDVeWYF3mkn+Uft75FtWrHgXjDyyk5hQxJL3g5rgsaj+YWi\n6SRrUjnXos9j8jwVXnx1zVKMoEQ3zl3DjOzEvQsGwltPNUXA+4QgU4eiMc3BDFQJ\nPakHpbqYjGy1DSisJzLeqQjdbVHHa7ZENbvHThkCgYEA53cvT3EWuf6JRdNjwZAI\nRmWzxO3vZaqQACr5dN5K5KDvW/Nz1ei1nUUam9t43a47eYjLxeSTfRfYGaZed3CS\nQYd6EE1UqYPNTrmUZwDUSh/RTOCIhBG3XG8srLp5qr4p76QDm5AZ3hjG9nrGDN78\nnp8oT5AUrRpF2BQh6rXrMGI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "clusterspreadsheet@caramel-banner-394014.iam.gserviceaccount.com",
+  "client_id": "100461965953996906272",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/clusterspreadsheet%40caramel-banner-394014.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
