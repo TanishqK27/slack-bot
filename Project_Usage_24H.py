@@ -369,8 +369,10 @@ def main():
     # Get the shareable link
     link = share_spreadsheet_with_link(spreadsheet)
 
-    # Add the link to your message
-    post_message(message_data)
+    try:
+        post_message(message_data)
+    except Exception:
+        print('Error')
 
 
 if __name__ == "__main__":
