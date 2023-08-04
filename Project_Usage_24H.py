@@ -14,6 +14,7 @@ from flask import Flask, request, make_response, Response
 import hashlib
 import hmac
 import json
+import threading
 load_dotenv()
 app = Flask(__name__)
 
@@ -30,10 +31,11 @@ def slack_usage24h():
     if not hmac.compare_digest(hashed_req, signature):
         return make_response("Invalid request", 403)
 
-    # Perform your GPU usage calculations
-    main()
+    # Start a new thread to perform GPU usage calculations
+    thread = threading.Thread(target=main)
+    thread.start()
 
-    return make_response("", 200)
+    return make_response("Processing your request...", 200)
 # Datadog credentials
 DD_SITE = os.environ.get("DD_SITE")
 DD_API_KEY = os.environ.get("DD_API_KEY")
