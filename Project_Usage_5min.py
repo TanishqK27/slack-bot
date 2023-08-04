@@ -248,14 +248,14 @@ def main():
     with ApiClient(configuration) as api_client:
         api_instance = MetricsApi(api_client)
         sum_response = api_instance.query_metrics(
-            int((datetime.now() + relativedelta(minutes=-5)).timestamp()),
+            int((datetime.now() + relativedelta(days=-1)).timestamp()),
             int(datetime.now().timestamp()),
             "sum:dcgm.power_usage{availability-zone:sagemaker2} by {project}"
         )
     with ApiClient(configuration) as api_client:
         api_instance = MetricsApi(api_client)
         avg_response = api_instance.query_metrics(
-            int((datetime.now() + relativedelta(minutes=-5)).timestamp()),
+            int((datetime.now() + relativedelta(days=-1)).timestamp()),
             int(datetime.now().timestamp()),
             "avg:dcgm.power_usage{availability-zone:sagemaker2} by {project}"
         )
@@ -263,21 +263,23 @@ def main():
     with ApiClient(configuration) as api_client:
         api_instance = MetricsApi(api_client)
         overall_response = api_instance.query_metrics(
-            int((datetime.now() + relativedelta(minutes=-5)).timestamp()),
+            int((datetime.now() + relativedelta(days=-1)).timestamp()),
             int(datetime.now().timestamp()),
             "abs(avg:dcgm.power_usage{availability-zone:sagemaker2})"
         )
 
-    message_data, gpu_usage_info, number, average_percentage_overall_gpu_util = calculate_gpu_usage_info(avg_response, sum_response, overall_response)
+    message_data, gpu_usage_info, number, average_percentage_overall_gpu_util = calculate_gpu_usage_info(avg_response,
+                                                                                                         sum_response,
+                                                                                                         overall_response)
 
-                                                                                                         # Convert your data into a 2D list
+    # Convert your data into a 2D list
     data = []
 
     # Add the report text to the data
-    data.append(["LAST 5 MIN GPU UTILISATION REPORT"])
+    data.append(["LAST 24H GPU UTILISATION REPORT"])
     data.append(["Overview:"])
     data.append([
-        "In today's report, we present the GPU utilization statistics for the system in the last 5 minutes. The following insights offer a comprehensive view of how GPU resources were utilized across various projects."])
+        "In today's report, we present the GPU utilization statistics for the system in the last 24 hours. The following insights offer a comprehensive view of how GPU resources were utilized across various projects."])
     data.append(["Overall GPU Utilization:"])
     data.append([f"- Average GPU power draw across all projects:  {number:.2f} watts"])
     data.append([f'- Average percentage GPU usage: {average_percentage_overall_gpu_util:.2f}%'])
@@ -295,11 +297,11 @@ def main():
             result['project_name'],
             f"{result['percentage_gpu_usage']:.2f}%",
             f"{result['nodes_used']}",
-            "N/A"
+            f"{result['total_gpu_usage_time_hours'][result['project_name']]:.2f} hours"
         ])
 
     # Open the existing Google Sheets file and fill it with new data
-    spreadsheet = open_and_fill_spreadsheet(data, 'Project Usage Last 5min')
+    spreadsheet = open_and_fill_spreadsheet(data, 'Project Usage Last 24H')
     # Get the worksheet
     worksheet = spreadsheet.get_worksheet(0)
 
@@ -346,6 +348,8 @@ def main():
     # Get the shareable link
     link = share_spreadsheet_with_link(spreadsheet)
 
-    # Add the link to your message
-    post_message(message_data)
+    try:
+        post_message(message_data)
+    except Exception:
+        print('Error')
 
