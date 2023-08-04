@@ -349,6 +349,3 @@ def main():
     # Add the link to your message
     post_message(message_data)
 
-
-if __name__ == "__main__":
-    main()
