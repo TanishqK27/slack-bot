@@ -76,7 +76,7 @@ def slack_usage4h():
 
     return make_response("Processing your request...", 200)
 
-app.route('/slack/usage5min', methods=['POST'])
+@app.route('/slack/usage5min', methods=['POST'])
 def slack_usage5min():
     timestamp = request.headers.get('X-Slack-Request-Timestamp')
     signature = request.headers.get('X-Slack-Signature')
