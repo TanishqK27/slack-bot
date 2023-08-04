@@ -15,6 +15,10 @@ import hashlib
 import hmac
 import json
 import threading
+from Project_Usage_1H import main as main_1h
+from Project_Usage_4H import main as main_4h
+from Project_Usage_5min import main as main_5min
+from Project_Usage_12H import main as main_12h
 load_dotenv()
 app = Flask(__name__)
 
@@ -36,6 +40,75 @@ def slack_usage24h():
     thread.start()
 
     return make_response("Processing your request...", 200)
+
+
+@app.route('/slack/usage1h', methods=['POST'])
+def slack_usage1h():
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    thread = threading.Thread(target=main_1h)
+    thread.start()
+
+    return make_response("", 200)
+
+@app.route('/slack/usage4h', methods=['POST'])
+def slack_usage4h():
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    thread = threading.Thread(target=main_4h)
+    thread.start()
+
+    return make_response("", 200)
+
+app.route('/slack/usage5min', methods=['POST'])
+def slack_usage5min():
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    thread = threading.Thread(target=main_5min)
+    thread.start()
+
+    return make_response("", 200)
+
+@app.route('/slack/usage12h', methods=['POST'])
+def slack_usage12h():
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    thread = threading.Thread(target=main_12h)
+    thread.start()
+
+    return make_response("", 200)
 # Datadog credentials
 DD_SITE = os.environ.get("DD_SITE")
 DD_API_KEY = os.environ.get("DD_API_KEY")
