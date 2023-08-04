@@ -54,7 +54,9 @@ def post_message(message):
 def open_and_fill_spreadsheet(data: List[List[str]], sheet_name: str) -> gspread.Spreadsheet:
     # Use the OAuth2 credentials to authorize gspread
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name(os.getenv('GOOGLE_APPLICATION_CREDENTIALS'), scope)
+    json_creds_str = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
+    json_creds_dict = json.loads(json_creds_str)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(json_creds_dict, scope)
     client = gspread.authorize(creds)
 
     # Open the existing Google Sheets file
