@@ -160,13 +160,12 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         nodes_used = round(nodes_used)
 
         total_nodes += nodes_used
-        print(nodes_used)
-        print('nodes', total_nodes)
+
 
         percentage_total = percentage_gpu_usage * nodes_used
         overall_percentage_total += percentage_total
 
-        print('Overall percentage total:', overall_percentage_total)
+
 
         a = (avg_gpu_usage[project_name])
         b = (total_gpu_usage_sum[project_name] / total_data_points[project_name])
@@ -201,12 +200,11 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     average_percentage_overall_gpu_util = (number - 48) / 3.5
 
     total_average_power = sum(avg_gpu_usage.values())
-    print("Total average power:", number)
+
     num_projects = len(avg_gpu_usage)
-    print('Overall percentage of GPU utilisation', average_percentage_overall_gpu_util)
+
     average_waste_rate = waste_rate_total / num_projects
-    print('Average waste rate is:', average_waste_rate)
-    print('Total dollars wasted:', dollars_wasted_total)
+
 
     # Sort the projects by dollars wasted in descending order
 
