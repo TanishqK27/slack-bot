@@ -57,7 +57,7 @@ def slack_usage1h():
     thread = threading.Thread(target=main_1h)
     thread.start()
 
-    return make_response("", 200)
+    return make_response("Processing your request...", 200)
 
 @app.route('/slack/usage4h', methods=['POST'])
 def slack_usage4h():
@@ -74,7 +74,7 @@ def slack_usage4h():
     thread = threading.Thread(target=main_4h)
     thread.start()
 
-    return make_response("", 200)
+    return make_response("Processing your request...", 200)
 
 app.route('/slack/usage5min', methods=['POST'])
 def slack_usage5min():
@@ -91,7 +91,7 @@ def slack_usage5min():
     thread = threading.Thread(target=main_5min)
     thread.start()
 
-    return make_response("", 200)
+    return make_response("Processing your request...", 200)
 
 @app.route('/slack/usage12h', methods=['POST'])
 def slack_usage12h():
@@ -108,7 +108,7 @@ def slack_usage12h():
     thread = threading.Thread(target=main_12h)
     thread.start()
 
-    return make_response("", 200)
+    return make_response("Processing your request...", 200)
 # Datadog credentials
 DD_SITE = os.environ.get("DD_SITE")
 DD_API_KEY = os.environ.get("DD_API_KEY")
