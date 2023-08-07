@@ -239,7 +239,7 @@ def share_spreadsheet_with_link(spreadsheet: gspread.Spreadsheet) -> str:
     return f"https://docs.google.com/spreadsheets/d/{spreadsheet.id}/edit"
 
 
-def calculate_gpu_usage_info(avg_response, sum_response, overall_response, overall_response_cw):
+def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     waste_rate_total = 0
     dollars_wasted_total = 0
     percentage_total = 0
@@ -252,8 +252,6 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response, overa
     total_nodes = 0
     overall_gpu_sum = 0
     overall_gpu_count = 0
-    overall_gpu_sumcw = 0
-    overall_gpu_countcw = 0
     # To store the information for each project
 
     # Calculate average GPU usage and total GPU usage for all data points in avg_response and sum_response respectively
@@ -345,18 +343,6 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response, overa
             'dollars_wasted': dollars_wasted
         })
 
-    for series_data in overall_response_cw['series']:
-        pointlist = series_data['pointlist']
-        for point in pointlist:
-            overall_gpu_countcw += 1
-            if hasattr(point, 'value') and point.value[1] is not None:
-                overall_gpu_sumcw += point.value[1]
-
-    numbercw = overall_gpu_sumcw / overall_gpu_countcw
-
-    average_percentage_overall_gpu_utilcw = (numbercw - 48000)/ 3500
-
-
     for series_data in overall_response['series']:
         pointlist = series_data['pointlist']
 
@@ -411,8 +397,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response, overa
     overall_report += "Overall GPU Utilization:\n"
     overall_report += f"*- Average GPU power draw across all projects:*  {number:.2f} watts\n"
 
-    overall_report += f'*- Average percentage GPU usage for SM2:* {average_percentage_overall_gpu_util:.2f}%\n'
-    overall_report += f'*- Average percentage GPU usage for CW:* {average_percentage_overall_gpu_utilcw:.2f}%\n'
+    overall_report += f'*- Average percentage GPU usage:* {average_percentage_overall_gpu_util:.2f}%\n'
 
     overall_report += f"*Table which shows the top 10 projects*\n"
     overall_report += f'Note the empty project name is idle, unused nodes.'
@@ -424,7 +409,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response, overa
     full_message += "\nPlease take necessary actions to mitigate wastage."
     full_message += f"\nCheck out the full report: https://docs.google.com/spreadsheets/d/1bUeb7Vl95sdE8SP2QeheSgZfdJK3FMqyY-Pme3Gz1MI/edit?usp=sharing"
 
-    return full_message, message_data, number, average_percentage_overall_gpu_util, average_percentage_overall_gpu_utilcw
+    return full_message, message_data, number, average_percentage_overall_gpu_util
 
 
 # Your existing code here
@@ -460,15 +445,9 @@ def main():
             "abs(avg:dcgm.power_usage{availability-zone:sagemaker2})"
         )
 
-    with ApiClient(configuration) as api_client:
-        api_instance = MetricsApi(api_client)
-        overall_response_cw = api_instance.query_metrics(
-            int((datetime.now() + relativedelta(days=-1)).timestamp()),
-            int(datetime.now().timestamp()),
-            "abs(avg:nvml.power_usage{availability-zone:cw-prod})"
-        )
-
-    message_data, gpu_usage_info, number, average_percentage_overall_gpu_util, average_percentage_overall_gpu_utilcw = calculate_gpu_usage_info(avg_response,sum_response,overall_response, overall_response_cw)
+    message_data, gpu_usage_info, number, average_percentage_overall_gpu_util = calculate_gpu_usage_info(avg_response,
+                                                                                                         sum_response,
+                                                                                                         overall_response)
 
     # Convert your data into a 2D list
     data = []
@@ -480,8 +459,7 @@ def main():
         "In today's report, we present the GPU utilization statistics for the system in the last 24 hours. The following insights offer a comprehensive view of how GPU resources were utilized across various projects."])
     data.append(["Overall GPU Utilization:"])
     data.append([f"- Average GPU power draw across all projects:  {number:.2f} watts"])
-    data.append([f'- Average percentage GPU usage SM2: {average_percentage_overall_gpu_util:.2f}%'])
-    data.append([f'- Average percentage GPU usage CW: {average_percentage_overall_gpu_utilcw:.2f}%'])
+    data.append([f'- Average percentage GPU usage: {average_percentage_overall_gpu_util:.2f}%'])
     data.append(["Table which shows the top 10 projects"])
     data.append(["Note the empty project name is idle, unused nodes."])
 
