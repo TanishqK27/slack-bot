@@ -37,6 +37,14 @@ with ApiClient(configuration) as api_client:
         "avg:stabilityapi.endpoint.instances_in_service{host:internal.api.stability.ai}.as_count()"
     )
 
+with ApiClient(configuration) as api_client:
+    api_instance = MetricsApi(api_client)
+    instances_in_service2 = api_instance.query_metrics(
+        int((datetime.now() + relativedelta(days=-1)).timestamp()),
+        int(datetime.now().timestamp()),
+        "avg:stabilityapi.endpoint.generations{host:internal.api.stability.ai} by {engine,host}.as_rate()"
+    )
+
 
 
 with ApiClient(configuration) as api_client:
@@ -66,6 +74,43 @@ with ApiClient(configuration) as api_client:
 
     )
 
+print(instances_in_service2)
+def print_instances_stats(instances_in_service2):
+    # Create a dictionary for the name replacements
+
+    name_replacements = {
+        'engine:esrgan-v1-x2plus,host:internal.api.stability.ai': 'ESRGAN',
+        'engine:stable-diffusion-xl-beta-v2-2-2,host:internal.api.stability.ai': 'SDXLB',
+        'engine:stable-diffusion-xl-1024-v0-9,host:internal.api.stability.ai': 'SDXL0.9',
+        'engine:stable-diffusion-xl-tiling-v2-2,host:internal.api.stability.ai': 'SDXLT',
+        'engine:stable-diffusion-xl-1024-v1-0,host:internal.api.stability.ai': 'SDXL1.0'
+    }
+
+    # Initialize the result string with the table header
+    result = f'{"Engine":<6} | {"Avg":<5} | {"Min":<5} | {"Max":<5}\n'
+    result += '-'*32 + '\n'  # Add a line under the header
+
+    for series_data in instances_in_service['series']:
+        project_name = series_data['scope']
+
+        # Replace the project name if it's in the dictionary
+        project_name = name_replacements.get(project_name, project_name)
+
+        pointlist = series_data.get('pointlist', [])
+
+        # Extract the values from the pointlist
+        values = [point.value[1] for point in pointlist if hasattr(point, 'value') and point.value[1] is not None]
+
+        # Calculate avg, min, and max
+        avg = sum(values) / len(values) if values else 0
+        min_val = min(values) if values else 0
+        max_val = max(values) if values else 0
+
+        # Append the data for this project to the result string
+        result += f'{project_name:<7} | {avg:<5.2f} | {min_val:<5.2f} | {max_val:<5.2f}\n'
+
+    # Return the result string, wrapped in a code block for Slack
+    return f'```\n{result}\n```'
 def print_project_stats(generations_table):
     # Create a dictionary for the name replacements
     name_replacements = {
@@ -173,7 +218,7 @@ def avg_available_capacity(requests_active, instances_in_service):
 SLACK_TOKEN = os.getenv("SLACK_BOT_TOKEN")
 
 # Specify Slack channel in the code
-SLACK_CHANNEL = "#cluster-usage"
+SLACK_CHANNEL = "#cluster-bot-testing"
 
 # Initialize a Web API client
 slack_client = slack.WebClient(token=SLACK_TOKEN)
@@ -183,6 +228,7 @@ total_generations = calculate_total_generations(generations_sum)
 average_rps = calculate_average_RPS(generations_avg)
 average_capacity = avg_available_capacity(requests_active, instances_in_service)
 generations_t = print_project_stats(generations_table)
+instances_t = print_instances_stats(instances_in_service2)
 
 # Format total generations as millions
 total_generations_millions = total_generations / 1_000_000
@@ -198,6 +244,9 @@ report = f"""
 *TABLE OF ALL ENGINES BY GENERATION/S*
 {generations_t}
 Note: SDXLB = SDXL beta, SDXLT = SDXL tiling
+
+*TABLE OF ALL ENGINES BY INSTANCES BY ENDPOINT*
+{instances_t}
 """
 
 try:
