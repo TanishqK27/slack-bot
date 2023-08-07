@@ -283,10 +283,10 @@ def main():
     data = []
 
     # Add the report text to the data
-    data.append(["LAST 12H GPU UTILISATION REPORT"])
+    data.append(["LAST 24H EXTERNAL GPU UTILISATION REPORT"])
     data.append(["Overview:"])
     data.append([
-        "In today's report, we present the GPU utilization statistics for the system in the last 12 hours. The following insights offer a comprehensive view of how GPU resources were utilized across various projects."])
+        "In today's report, we present the external GPU utilization statistics for the system in the last 24 hours. The following insights offer a comprehensive view of how GPU resources were utilized across various projects."])
     data.append(["Overall GPU Utilization:"])
     data.append([f"- Average GPU power draw across all projects:  {number:.2f} watts"])
     data.append([f'- Average percentage GPU usage: {average_percentage_overall_gpu_util:.2f}%'])
@@ -304,7 +304,7 @@ def main():
             result['project_name'],
             f"{result['percentage_gpu_usage']:.2f}%",
             f"{result['nodes_used']}",
-            f"{(result['total_gpu_usage_time_hours'][result['project_name']])*0.4:.2f} hours"
+            f"{(result['total_gpu_usage_time_hours'][result['project_name']])   :.2f} hours"
         ])
 
     # Open the existing Google Sheets file and fill it with new data
