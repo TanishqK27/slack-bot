@@ -348,7 +348,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response, overa
     for series_data in overall_response_cw['series']:
         pointlist = series_data['pointlist']
         for point in pointlist:
-            overall_gpu_countcw +=1
+            overall_gpu_countcw += 1
             if hasattr(point, 'value') and point.value[1] is not None:
                 overall_gpu_sumcw += point.value[1]
 
