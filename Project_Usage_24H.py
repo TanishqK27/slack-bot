@@ -40,7 +40,7 @@ def slack_usage24h():
         return make_response("Invalid request", 403)
 
     # Start a new thread to perform GPU usage calculations
-    thread = threading.Thread(target=exmain_1h)
+    thread = threading.Thread(target=main)
     thread.start()
 
     return make_response("Processing your request...", 200)
@@ -59,7 +59,7 @@ def slack_usage24h():
         return make_response("Invalid request", 403)
 
     # Start a new thread to perform GPU usage calculations
-    thread = threading.Thread(target=main)
+    thread = threading.Thread(target=exmain_1h)
     thread.start()
 
     return make_response("Processing your request...", 200)
