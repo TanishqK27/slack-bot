@@ -25,7 +25,7 @@ DD_APP_KEY = os.environ.get("DD_APP_KEY")
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#cluster-bot-testing'
+CHANNEL_NAME = '#cluster-usage'
 
 # Slack client
 client = slack.WebClient(token=API_TOKEN)
@@ -216,12 +216,12 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             result['project_name'][:11],  # Truncate project_name to 15 characters
             f"{result['percentage_gpu_usage']:.0f}%",  # No decimal places for percentage
             f"{result['nodes_used']}",
-            f"{(int(result['total_gpu_usage_time_hours'][result['project_name']]))*0.4:.0f}"  # No decimal places for hours
+            f"{(int(result['total_gpu_usage_time_hours'][result['project_name']])):.0f}"  # No decimal places for hours
         )
         messages.append(message)
-    overall_report = f"*LAST 12H GPU UTILISATION REPORT*\n\n"
+    overall_report = f"*LAST 24H EXTERNAL GPU UTILISATION REPORT*\n\n"
     overall_report += "*Overview:*\n"
-    overall_report += "In today's report, we present the GPU utilization statistics for the system in the last 12 hours. " \
+    overall_report += "In today's report, we present the external GPU utilization statistics for the system in the last 24 hours. " \
                       "The following insights offer a comprehensive view of how GPU resources were utilized " \
                       "across various projects. \n\n"
     overall_report += "Overall GPU Utilization:\n"

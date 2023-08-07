@@ -25,7 +25,7 @@ DD_APP_KEY = os.environ.get("DD_APP_KEY")
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#cluster-bot-testing'
+CHANNEL_NAME = '#cluster-usage'
 
 # Slack client
 client = slack.WebClient(token=API_TOKEN)
@@ -216,7 +216,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             result['project_name'][:11],  # Truncate project_name to 15 characters
             f"{result['percentage_gpu_usage']:.0f}%",  # No decimal places for percentage
             f"{result['nodes_used']}",
-            f"{(int(result['total_gpu_usage_time_hours'][result['project_name']]))*0.4:.0f}"  # No decimal places for hours
+            f"{(int(result['total_gpu_usage_time_hours'][result['project_name']]))*0.2:.0f}"  # No decimal places for hours
         )
         messages.append(message)
     overall_report = f"*LAST 4H EXTERNAL GPU UTILISATION REPORT*\n\n"
