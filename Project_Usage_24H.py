@@ -46,7 +46,7 @@ def slack_usage24h():
     return make_response("Processing your request...", 200)
 
 @app.route('/slack/exusage1h', methods=['POST'])
-def slack_usage24h():
+def slack_exusage1h():
     # Validate the request from Slack
     timestamp = request.headers.get('X-Slack-Request-Timestamp')
     signature = request.headers.get('X-Slack-Signature')
@@ -102,7 +102,7 @@ def slack_usage1h():
 
 
 @app.route('/slack/exusage12h', methods=['POST'])
-def slack_exusage24h():
+def slack_exusage12h():
     # Validate the request from Slack
     timestamp = request.headers.get('X-Slack-Request-Timestamp')
     signature = request.headers.get('X-Slack-Signature')
