@@ -8,14 +8,11 @@ from datadog_api_client import ApiClient, Configuration
 from datadog_api_client.v1.api.metrics_api import MetricsApi
 from dotenv import load_dotenv
 import slack
-from googleapiclient.discovery import build
 from gspread_formatting import *
-from flask import Flask, request, make_response, Response
-import hashlib
-import hmac
+from flask import Flask
 import json
-import threading
 
+app = Flask(__name__)
 load_dotenv()
 
 # Datadog credentials
@@ -216,12 +213,12 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             result['project_name'][:11],  # Truncate project_name to 15 characters
             f"{result['percentage_gpu_usage']:.0f}%",  # No decimal places for percentage
             f"{result['nodes_used']}",
-            f"{(int(result['total_gpu_usage_time_hours'][result['project_name']])):.0f}"  # No decimal places for hours
+            "1.00"  # No decimal places for hours
         )
         messages.append(message)
-    overall_report = f"*LAST 24H EXTERNAL GPU UTILISATION REPORT*\n\n"
+    overall_report = f"*LAST 1H GPU UTILISATION REPORT*\n\n"
     overall_report += "*Overview:*\n"
-    overall_report += "In today's report, we present the external GPU utilization statistics for the system in the last 24 hours. " \
+    overall_report += "In today's report, we present the GPU utilization statistics for the system in the last 1 hour. " \
                       "The following insights offer a comprehensive view of how GPU resources were utilized " \
                       "across various projects. \n\n"
     overall_report += "Overall GPU Utilization:\n"
@@ -237,7 +234,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     # Add a closing line
     full_message += "\nPlease take necessary actions to mitigate wastage."
-    full_message += f"\nCheck out the full report: https://docs.google.com/spreadsheets/d/1pJ0Ycs7dP2BOzTXikoaZpnq7-Tr6nA8gPNj2z6OY_kQ/edit#gid=0"
+    full_message += f"\nCheck out the full report: https://docs.google.com/spreadsheets/d/1A7rRGlIhQEQEf2zVgpiOcYq1eVTvLbq9Kyirbox9yrc/edit#gid=0"
 
     return full_message, message_data, number, average_percentage_overall_gpu_util
 
@@ -255,24 +252,24 @@ def main():
     with ApiClient(configuration) as api_client:
         api_instance = MetricsApi(api_client)
         sum_response = api_instance.query_metrics(
-            int((datetime.now() + relativedelta(days=-1)).timestamp()),
+            int((datetime.now() + relativedelta(hours=-1)).timestamp()),
             int(datetime.now().timestamp()),
-            "sum:dcgm.power_usage{availability-zone:external} by {project}"
+            "sum:dcgm.power_usage{availability-zone:sagemaker2} by {project}"
         )
     with ApiClient(configuration) as api_client:
         api_instance = MetricsApi(api_client)
         avg_response = api_instance.query_metrics(
-            int((datetime.now() + relativedelta(days=-1)).timestamp()),
+            int((datetime.now() + relativedelta(hours=-1)).timestamp()),
             int(datetime.now().timestamp()),
-            "avg:dcgm.power_usage{availability-zone:external} by {project}"
+            "avg:dcgm.power_usage{availability-zone:sagemaker2} by {project}"
         )
 
     with ApiClient(configuration) as api_client:
         api_instance = MetricsApi(api_client)
         overall_response = api_instance.query_metrics(
-            int((datetime.now() + relativedelta(days=-1)).timestamp()),
+            int((datetime.now() + relativedelta(hours=-1)).timestamp()),
             int(datetime.now().timestamp()),
-            "abs(avg:dcgm.power_usage{availability-zone:external})"
+            "abs(avg:dcgm.power_usage{availability-zone:sagemaker2})"
         )
 
     message_data, gpu_usage_info, number, average_percentage_overall_gpu_util = calculate_gpu_usage_info(avg_response,
@@ -283,10 +280,10 @@ def main():
     data = []
 
     # Add the report text to the data
-    data.append(["LAST 24H EXTERNAL GPU UTILISATION REPORT"])
+    data.append(["LAST 1H GPU UTILISATION REPORT"])
     data.append(["Overview:"])
     data.append([
-        "In today's report, we present the external GPU utilization statistics for the system in the last 24 hours. The following insights offer a comprehensive view of how GPU resources were utilized across various projects."])
+        "In today's report, we present the GPU utilization statistics for the system in the last 1 hour. The following insights offer a comprehensive view of how GPU resources were utilized across various projects."])
     data.append(["Overall GPU Utilization:"])
     data.append([f"- Average GPU power draw across all projects:  {number:.2f} watts"])
     data.append([f'- Average percentage GPU usage: {average_percentage_overall_gpu_util:.2f}%'])
@@ -304,11 +301,11 @@ def main():
             result['project_name'],
             f"{result['percentage_gpu_usage']:.2f}%",
             f"{result['nodes_used']}",
-            f"{(result['total_gpu_usage_time_hours'][result['project_name']])   :.2f} hours"
+            "1.00"
         ])
 
     # Open the existing Google Sheets file and fill it with new data
-    spreadsheet = open_and_fill_spreadsheet(data, 'External Project Usage 24H')
+    spreadsheet = open_and_fill_spreadsheet(data, 'Project Usage Last 1H')
     # Get the worksheet
     worksheet = spreadsheet.get_worksheet(0)
 
@@ -360,4 +357,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
