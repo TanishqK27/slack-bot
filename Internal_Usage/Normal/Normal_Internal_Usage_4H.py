@@ -22,7 +22,7 @@ DD_APP_KEY = os.environ.get("DD_APP_KEY")
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#cluster-bot-testing'
+CHANNEL_NAME = '#cluster-usage'
 
 
 # Slack client
