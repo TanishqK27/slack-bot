@@ -16,7 +16,7 @@ import hmac
 import json
 import threading
 
-
+from Internal_Usage.Internal_Usage_1H import main as main_1h
 from Internal_Usage.Internal_Usage_4H import main as main_4h
 from Internal_Usage.Internal_Usage_5min import main as main_5min
 from Internal_Usage.Internal_Usage_12H import main as main_12h
@@ -25,6 +25,11 @@ from External_Usage.External_Usage_24H import main as exmain_24h
 from External_Usage.External_Usage_12H import main as exmain_12h
 from External_Usage.External_Usage_4H import main as exmain_4h
 from External_Usage.External_Usage_1H import main as exmain_1h
+
+
+
+from On_Demand_Usage.OnDemand_24H import main as main_od24
+
 load_dotenv()
 app = Flask(__name__)
 
@@ -192,6 +197,26 @@ def slack_usage12h():
     thread.start()
 
     return make_response("Processing your request...", 200)
+
+@app.route('/slack/od24h', methods=['POST'])
+def slack_od24h():
+    # Validate the request from Slack
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    # Start a new thread to perform GPU usage calculations
+    thread = threading.Thread(target=main_od24)
+    thread.start()
+
+    return make_response("Processing your request...", 200)
+
 # Datadog credentials
 DD_SITE = os.environ.get("DD_SITE")
 DD_API_KEY = os.environ.get("DD_API_KEY")
