@@ -124,7 +124,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
                 formatted_time = timestamp_datetime.strftime('%Y-%m-%d %H:%M:%S')  # Format the datetime as desired
                 project_pointlist.append({'timestamp': formatted_time, 'value': value})
 
-        total_gpu_usage_time_hours[project_name] = 0
+        total_hours_gpu = 0
 
         for i in range(len(project_pointlist)):
             if project_pointlist[i]['value'] is not None:
@@ -133,7 +133,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
         # Convert total minutes to hours (with decimals if not a whole number)
 
-        total_gpu_usage_time_hours[project_name] /= 60
+        total_hours_gpu = 24
         percentage_gpu_usage = (avg_gpu_usage[project_name] - 48) / 3.
 
         percentage_gpu_usage = abs(percentage_gpu_usage)
@@ -154,7 +154,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         # Calculate Waste Rate
         waste_rate = (1 - ((a - 48) / 350)) * b / a * 1.3
         waste_rate_total += waste_rate
-        dollars_wasted = (1 - ((a - 48) / 350)) * b / a * 1.3 * total_gpu_usage_time_hours[project_name]
+        dollars_wasted = (1 - ((a - 48) / 350)) * b / a * 1.3 * total_hours_gpu
         dollars_wasted_total += dollars_wasted
         # Save the project information
         project_info.append({
