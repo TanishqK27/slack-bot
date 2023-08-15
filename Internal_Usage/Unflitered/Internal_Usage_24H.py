@@ -133,7 +133,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
         # Convert total minutes to hours (with decimals if not a whole number)
 
-        total_gpu_usage_time_hours[project_name] = 24
+        total_gpu_usage_time_hours[project_name] /= 60
         percentage_gpu_usage = (avg_gpu_usage[project_name] - 48) / 3.
 
         percentage_gpu_usage = abs(percentage_gpu_usage)
