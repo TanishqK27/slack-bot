@@ -80,11 +80,12 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     # To store the information for each project
 
     # Calculate average GPU usage and total GPU usage for all data points in avg_response and sum_response respectively
-    for series_data in avg_response['series']:
+   for series_data in avg_response['series']:
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
         pointlist = series_data['pointlist']
         if project_name == 'music_gen':
             continue
+        
 
         total_gpu_sum = 0  # To store the total GPU usage for the project
         num_points = len(pointlist)  # To store the total number of data points for the project
@@ -102,10 +103,11 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     # a# Calculate and print the total GPU usage and average GPU usage for each project in sum_response
     for series_data in sum_response['series']:
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
-        print(project_name)
+
         pointlist = series_data['pointlist']
         if project_name == 'music_gen':
             continue
+    
         total_gpu_usage_sum[project_name] = 0
         total_data_points[project_name] = 0
 
