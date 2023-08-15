@@ -249,6 +249,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 # You should return project_info at the end of this function
 
 def main():
+
     configuration = Configuration(api_key={
         'apiKeyAuth': DD_API_KEY,
         'appKeyAuth': DD_APP_KEY

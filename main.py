@@ -74,6 +74,8 @@ def slack_usage24h():
     thread = threading.Thread(target=main_24h)
     thread.start()
 
+
+
     return make_response("Processing your request...", 200)
 @app.route('/slack/Usage12h', methods=['POST'])
 def slack_usage12h():
