@@ -15,7 +15,6 @@ import json
 app = Flask(__name__)
 load_dotenv()
 
-
 # Datadog credentials
 DD_SITE = os.environ.get("DD_SITE")
 DD_API_KEY = os.environ.get("DD_API_KEY")
@@ -84,7 +83,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     for series_data in avg_response['series']:
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
         pointlist = series_data['pointlist']
-        if project_name == 'top_music':
+        if project_name == 'music_gen':
             continue
 
         total_gpu_sum = 0  # To store the total GPU usage for the project
@@ -105,7 +104,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
         print(project_name)
         pointlist = series_data['pointlist']
-        if project_name == 'top_music':
+        if project_name == 'music_gen':
             continue
         total_gpu_usage_sum[project_name] = 0
         total_data_points[project_name] = 0
@@ -146,11 +145,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
         total_nodes += nodes_used
 
-
         percentage_total = percentage_gpu_usage * nodes_used
         overall_percentage_total += percentage_total
-
-
 
         a = (avg_gpu_usage[project_name])
         b = (total_gpu_usage_sum[project_name] / total_data_points[project_name])
@@ -160,21 +156,22 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         dollars_wasted = (1 - ((a - 48) / 350)) * b / a * 1.3 * total_gpu_usage_time_hours[project_name]
         dollars_wasted_total += dollars_wasted
         # Save the project information
-        project_info.append({
+        if project_name != "music_gen":
+            project_info.append({
 
-            'project_name': project_name,
-            'avg power': a,
-            'sum power': b,
-            'percentage_gpu_usage': percentage_gpu_usage,
-            'nodes_used': nodes_used,
-            'total_gpu_usage_time_hours': total_gpu_usage_time_hours,
-            'waste_rate': waste_rate,
-            'dollars_wasted': dollars_wasted
-        })
+                'project_name': project_name,
+                'avg power': a,
+                'sum power': b,
+                'percentage_gpu_usage': percentage_gpu_usage,
+                'nodes_used': nodes_used,
+                'total_gpu_usage_time_hours': total_gpu_usage_time_hours,
+                'waste_rate': waste_rate,
+                'dollars_wasted': dollars_wasted
+            })
 
     for series_data in overall_response['series']:
         pointlist = series_data['pointlist']
-        if project_name == 'top_music':
+        if project_name == 'music_gen':
             continue
         for point in pointlist:
             overall_gpu_count += 1
@@ -190,7 +187,6 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     num_projects = len(avg_gpu_usage)
 
     average_waste_rate = waste_rate_total / num_projects
-
 
     # Sort the projects by dollars wasted in descending order
 
@@ -300,7 +296,7 @@ def main():
     data.append(['Project Name', '% GPU Usage', 'Nodes Used', 'Hours'])
 
     for result in gpu_usage_info[:10]:
-        if result['project_name'] == 'top_music':
+        if result['project_name'] == 'music_gen':
             continue
         data.append([
             result['project_name'],
