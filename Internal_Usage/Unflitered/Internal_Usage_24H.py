@@ -84,6 +84,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     for series_data in avg_response['series']:
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
         pointlist = series_data['pointlist']
+        if project_name == 'top_music':
+            continue
 
         total_gpu_sum = 0  # To store the total GPU usage for the project
         num_points = len(pointlist)  # To store the total number of data points for the project
@@ -103,7 +105,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
         print(project_name)
         pointlist = series_data['pointlist']
-
+        if project_name == 'top_music':
+            continue
         total_gpu_usage_sum[project_name] = 0
         total_data_points[project_name] = 0
 
@@ -171,7 +174,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     for series_data in overall_response['series']:
         pointlist = series_data['pointlist']
-
+        if project_name == 'top_music':
+            continue
         for point in pointlist:
             overall_gpu_count += 1
             if hasattr(point, 'value') and point.value[1] is not None:
@@ -296,6 +300,8 @@ def main():
     data.append(['Project Name', '% GPU Usage', 'Nodes Used', 'Hours'])
 
     for result in gpu_usage_info[:10]:
+        if result['project_name'] == 'top_music':
+            continue
         data.append([
             result['project_name'],
             f"{result['percentage_gpu_usage']:.2f}%",
