@@ -183,7 +183,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     number = overall_gpu_sum / overall_gpu_count
 
-    average_percentage_overall_gpu_util = (number - 48) / 3.5
+    average_percentage_overall_gpu_util = (number - 48000) / 3500
 
     total_average_power = sum(avg_gpu_usage.values())
 
@@ -231,11 +231,11 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     overall_report += f'Note the empty project name is idle, unused nodes.'
     # Join the messages together
 
-    full_message = overall_report + "```" + "\n".join(messages) + "```"
+    full_message = overall_report
 
     # Add a closing line
     full_message += "\nPlease take necessary actions to mitigate wastage."
-    full_message += f"\nCheck out the full report: https://docs.google.com/spreadsheets/d/1bUeb7Vl95sdE8SP2QeheSgZfdJK3FMqyY-Pme3Gz1MI/edit?usp=sharing"
+    full_message += f"\nWIP"
 
     return full_message, message_data, number, average_percentage_overall_gpu_util
 
