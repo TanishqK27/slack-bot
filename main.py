@@ -165,7 +165,7 @@ def slack_5():
     user_id = request.form.get('user_id')
 
     # Start a new thread to perform GPU usage calculations and pass the user_id
-    thread = threading.Thread(target=main6, args=(user_id,))
+    thread = threading.Thread(target=main5, args=(user_id,))
     thread.start()
 
     return make_response("Request received and is being processed...", 202)
