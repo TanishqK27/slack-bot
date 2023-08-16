@@ -37,6 +37,8 @@ def slack_help():
     thread = threading.Thread(target=help1)
     thread.start()
 
+    return make_response("Request received and is being processed", 202)
+
 @app.route('/slack/0', methods=['POST'])
 def slack_0():
     # Validate the request from Slack
@@ -53,6 +55,8 @@ def slack_0():
     # Start a new thread to perform GPU usage calculations
     thread = threading.Thread(target=main0)
     thread.start()
+
+    return make_response("Request received and is being processed", 202)
 
 @app.route('/slack/1', methods=['POST'])
 def slack_1():
@@ -71,6 +75,8 @@ def slack_1():
     thread = threading.Thread(target=main1)
     thread.start()
 
+    return make_response("Request received and is being processed", 202)
+
 @app.route('/slack/2', methods=['POST'])
 def slack_2():
     # Validate the request from Slack
@@ -88,6 +94,7 @@ def slack_2():
     thread = threading.Thread(target=main2)
     thread.start()
 
+    return make_response("Request received and is being processed", 202)
 @app.route('/slack/3', methods=['POST'])
 def slack_3():
     # Validate the request from Slack
@@ -105,6 +112,8 @@ def slack_3():
     thread = threading.Thread(target=main3)
     thread.start()
 
+    return make_response("Request received and is being processed", 202)
+
 @app.route('/slack/4', methods=['POST'])
 def slack_4():
     # Validate the request from Slack
@@ -121,6 +130,8 @@ def slack_4():
     # Start a new thread to perform GPU usage calculations
     thread = threading.Thread(target=main4)
     thread.start()
+
+    return make_response("Request received and is being processed", 202)
 
 
 '''   
@@ -159,3 +170,5 @@ def slack_6():
     # Start a new thread to perform GPU usage calculations
     thread = threading.Thread(target=main6)
     thread.start()
+
+    return make_response("Request received and is being processed", 202)
