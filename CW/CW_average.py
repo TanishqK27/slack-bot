@@ -87,7 +87,7 @@ def main():
     percentage = print_overall_usage_stats(a)
 
     SLACK_TOKEN = os.getenv("SLACK_BOT_TOKEN")
-    SLACK_CHANNEL = "#cluster-bot-testing"
+    SLACK_CHANNEL = "#proj-cluster-usage"
     slack_client = slack.WebClient(token=SLACK_TOKEN)
 
     # Create the report
