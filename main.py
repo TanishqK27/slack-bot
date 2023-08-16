@@ -73,8 +73,10 @@ def slack_1():
     if not hmac.compare_digest(hashed_req, signature):
         return make_response("Invalid request", 403)
 
-    # Start a new thread to perform GPU usage calculations
-    thread = threading.Thread(target=main1)
+    user_id = request.form.get('user_id')
+
+    # Start a new thread to perform GPU usage calculations and pass the user_id
+    thread = threading.Thread(target=main1, args=(user_id,))
     thread.start()
 
     return make_response("Request received and is being processed...", 202)
@@ -92,11 +94,14 @@ def slack_2():
     if not hmac.compare_digest(hashed_req, signature):
         return make_response("Invalid request", 403)
 
-    # Start a new thread to perform GPU usage calculations
-    thread = threading.Thread(target=main2)
+    user_id = request.form.get('user_id')
+
+    # Start a new thread to perform GPU usage calculations and pass the user_id
+    thread = threading.Thread(target=main2, args=(user_id,))
     thread.start()
 
     return make_response("Request received and is being processed...", 202)
+
 @app.route('/slack/3', methods=['POST'])
 def slack_3():
     # Validate the request from Slack
@@ -110,8 +115,10 @@ def slack_3():
     if not hmac.compare_digest(hashed_req, signature):
         return make_response("Invalid request", 403)
 
-    # Start a new thread to perform GPU usage calculations
-    thread = threading.Thread(target=main3)
+    user_id = request.form.get('user_id')
+
+    # Start a new thread to perform GPU usage calculations and pass the user_id
+    thread = threading.Thread(target=main3, args=(user_id,))
     thread.start()
 
     return make_response("Request received and is being processed...", 202)
@@ -129,8 +136,10 @@ def slack_4():
     if not hmac.compare_digest(hashed_req, signature):
         return make_response("Invalid request", 403)
 
-    # Start a new thread to perform GPU usage calculations
-    thread = threading.Thread(target=main4)
+    user_id = request.form.get('user_id')
+
+    # Start a new thread to perform GPU usage calculations and pass the user_id
+    thread = threading.Thread(target=main4, args=(user_id,))
     thread.start()
 
     return make_response("Request received and is being processed...", 202)
@@ -170,7 +179,10 @@ def slack_6():
         return make_response("Invalid request", 403)
 
     # Start a new thread to perform GPU usage calculations
-    thread = threading.Thread(target=main6)
+    user_id = request.form.get('user_id')
+
+    # Start a new thread to perform GPU usage calculations and pass the user_id
+    thread = threading.Thread(target=main6, args=(user_id,))
     thread.start()
 
     return make_response("Request received and is being processed...", 202)

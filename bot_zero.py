@@ -30,7 +30,7 @@ client = slack.WebClient(token=API_TOKEN)
 
 def post_message(message, user_id=None):
     if user_id:
-        message = f"Here is the report you requested <@{user_id}> " + message
+        message = f"Here is the report you requested <@{user_id}> \n" + message
     response = client.chat_postMessage(channel=CHANNEL_NAME, text=message)
     assert response["ok"], f"Error posting message: {response['error']}"
 

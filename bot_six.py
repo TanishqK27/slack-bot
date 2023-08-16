@@ -168,7 +168,7 @@ def avg_available_capacity(requests_active, instances_in_service):
     return average_c
 
 
-def main():
+def main(user_id):
     load_dotenv()
 
     DD_SITE = os.environ.get("DD_SITE")
@@ -233,7 +233,7 @@ def main():
         )
 
     SLACK_TOKEN = os.getenv("SLACK_BOT_TOKEN")
-    SLACK_CHANNEL = "#proj-cluster-usage"
+    SLACK_CHANNEL = "#cluster-bot-testing"
     slack_client = slack.WebClient(token=SLACK_TOKEN)
 
     # Get the metrics
@@ -249,6 +249,8 @@ def main():
     # Create the report
     report = f"""
     *LAST 24H ON DEMAND REPORT*:
+    
+    <@{user_id}> here is the requested report:
     
     This is a report which shows the details of On Demand cluster usage. 
 
