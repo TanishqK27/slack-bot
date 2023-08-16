@@ -39,11 +39,11 @@ configuration = Configuration(api_key={
 configuration.host = f"https://api.{DD_SITE}"
 
 
-def print_overall_usage_stats(a):
+def print_overall_usage_stats(b):
     # Extract average value from MetricsQueryResponse
     overall_gpu_count = 0
     overall_gpu_sum = 0
-    for series_data in a['series']:
+    for series_data in b['series']:
         pointlist = series_data['pointlist']
         for point in pointlist:
             overall_gpu_count += 1
