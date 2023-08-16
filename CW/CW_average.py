@@ -43,7 +43,7 @@ configuration.host = f"https://api.{DD_SITE}"
 def print_overall_usage_stats(a):
 
     percentage = (a - 48000) / 3500
-
+    print(percentage)
     return percentage
 def main():
     load_dotenv()
@@ -91,6 +91,7 @@ def main():
         response = slack_client.chat_postMessage(channel=SLACK_CHANNEL, text=report)
     except Exception as e:
         print(f"Error posting message: {str(e)}")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
