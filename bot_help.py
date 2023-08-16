@@ -16,19 +16,19 @@ from slack import WebClient
 
 app = Flask(__name__)
 
-slack_token = os.environ["SLACK_API_TOKEN"]
-slack_client = WebClient(token=slack_token)
+
+
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
 CHANNEL_NAME = '#cluster-bot-testing'
 
 # Slack client
-client = slack.WebClient(token=API_TOKEN)
+slack_client = slack.WebClient(token=API_TOKEN)
 
 
 def post_message(message):
-    response = client.chat_postMessage(channel=CHANNEL_NAME, text=message)
+    response = slack_client.chat_postMessage(channel=CHANNEL_NAME, text=message)
     assert response["ok"], f"Error posting message: {response['error']}"
 
 def main(user_id):
