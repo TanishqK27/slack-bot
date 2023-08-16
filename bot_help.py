@@ -56,7 +56,7 @@ In order to filter, you can use the following slash commands to see more:
     
     """
     # Get the channel ID from the incoming Slack payload
-    user_id = request.form.get('user_id')
+
 
 
     # Send the report to the channel using Slack API
