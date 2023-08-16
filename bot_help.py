@@ -56,11 +56,11 @@ In order to filter, you can use the following slash commands to see more:
     
     """
     # Get the channel ID from the incoming Slack payload
-    channel_id = request.form.get('channel_id')
+    user_id = request.form.get('user_id')
+
 
     # Send the report to the channel using Slack API
-    slack_client.chat_postMessage(channel=channel_id, text=message_data)
-
+    slack_client.chat_postMessage(channel=user_id, text=message_data)
 
     try:
         post_message(message_data)
