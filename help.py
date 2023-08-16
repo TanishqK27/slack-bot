@@ -1,29 +1,5 @@
-from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedelta
-from datadog_api_client import ApiClient, Configuration
-from datadog_api_client.v1.api.metrics_api import MetricsApi
-from dotenv import load_dotenv
-import os
-import slack
-import json
-from datetime import datetime
-from statistics import mean
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-from typing import List
-import os
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-from datadog_api_client import ApiClient, Configuration
-from datadog_api_client.v1.api.metrics_api import MetricsApi
-from dotenv import load_dotenv
-import slack
-from gspread_formatting import *
-from flask import Flask, request, make_response
-import hashlib
-import hmac
-import json
-import threading
+
+from flask import Flask
 
 app = Flask(__name__)
 

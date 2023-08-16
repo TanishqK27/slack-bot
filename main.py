@@ -14,7 +14,6 @@ from three import main as main3
 from four import main as main4
 #from five import main as main5
 from six import main as main6
-from six import main as main6
 
 load_dotenv()
 app = Flask(__name__)
