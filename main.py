@@ -124,7 +124,7 @@ def slack_4():
     thread.start()
 
 
- '''   
+'''   
 @app.route('/slack/5', methods=['POST'])
 def slack_5():
     # Validate the request from Slack
