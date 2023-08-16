@@ -12,7 +12,7 @@ from bot_one import main as main1
 from bot_two import main as main2
 from bot_three import main as main3
 from bot_four import main as main4
-#from five import main as main5
+from bot_five import main as main5
 from bot_six import main as main6
 
 load_dotenv()
@@ -145,7 +145,6 @@ def slack_4():
     return make_response("Request received and is being processed...", 202)
 
 
-'''   
 @app.route('/slack/5', methods=['POST'])
 def slack_5():
     # Validate the request from Slack
@@ -163,7 +162,6 @@ def slack_5():
     thread = threading.Thread(target=main5)
     thread.start()
 
-'''
 
 @app.route('/slack/6', methods=['POST'])
 def slack_6():
