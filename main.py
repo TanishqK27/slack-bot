@@ -857,7 +857,7 @@ def slack_cwusage5min():
     return make_response("Processing your request...", 200)
 
 
-@app.route('/slack/cwavgsage24h', methods=['POST'])
+@app.route('/slack/cwavgusage24h', methods=['POST'])
 def slack_cwavgsage24h():
     timestamp = request.headers.get('X-Slack-Request-Timestamp')
     signature = request.headers.get('X-Slack-Signature')
