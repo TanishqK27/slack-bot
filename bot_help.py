@@ -14,10 +14,22 @@ import json
 app = Flask(__name__)
 
 
+# Slack credentials
+API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
+CHANNEL_NAME = '#cluster-bot-testing'
+
+# Slack client
+client = slack.WebClient(token=API_TOKEN)
+
+
+def post_message(message):
+    response = client.chat_postMessage(channel=CHANNEL_NAME, text=message)
+    assert response["ok"], f"Error posting message: {response['error']}"
+
 def main():
 
     # Create the report
-    report = f"""
+    message_data = f"""
     *CLUSTER USAGE BOT USER GUIDE*:
     
     This is a cluster bot, that will give a daily report on all projects, giving overall usage details, and 
@@ -36,7 +48,10 @@ def main():
     
     """
 
-
+    try:
+        post_message(message_data)
+    except Exception:
+        print('Error')
 
 if __name__ == "__main__":
     app.run(debug=True)
