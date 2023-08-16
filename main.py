@@ -6,51 +6,57 @@ import hashlib
 import hmac
 import threading
 
-from Internal_Usage.Unflitered.Internal_Usage_1H import main as main_1h
-from Internal_Usage.Unflitered.Internal_Usage_4H import main as main_4h
-from Internal_Usage.Unflitered.Internal_Usage_5min import main as main_5min
-from Internal_Usage.Unflitered.Internal_Usage_12H import main as main_12h
-from Internal_Usage.Unflitered.Internal_Usage_24H import main as main_24h
+from SageMaker_2.Internal_Usage_SM2.Unflitered.Internal_Usage_1H import main as main_1h
+from SageMaker_2.Internal_Usage_SM2.Unflitered.Internal_Usage_4H import main as main_4h
+from SageMaker_2.Internal_Usage_SM2.Unflitered.Internal_Usage_5min import main as main_5min
+from SageMaker_2.Internal_Usage_SM2.Unflitered.Internal_Usage_12H import main as main_12h
+from SageMaker_2.Internal_Usage_SM2.Unflitered.Internal_Usage_24H import main as main_24h
 
-from Internal_Usage.Top.Top_Internal_Usage_1H import main as topmain_1h
-from Internal_Usage.Top.Top_Internal_Usage_4H import main as topmain_4h
-from Internal_Usage.Top.Top_Internal_Usage_5min import main as topmain_5min
-from Internal_Usage.Top.Top_Internal_Usage_12H import main as topmain_12h
-from Internal_Usage.Top.Top_Internal_Usage_24H import main as topmain_24h
+from SageMaker_2.Internal_Usage_SM2.Top.Top_Internal_Usage_1H import main as topmain_1h
+from SageMaker_2.Internal_Usage_SM2.Top.Top_Internal_Usage_4H import main as topmain_4h
+from SageMaker_2.Internal_Usage_SM2.Top.Top_Internal_Usage_5min import main as topmain_5min
+from SageMaker_2.Internal_Usage_SM2.Top.Top_Internal_Usage_12H import main as topmain_12h
+from SageMaker_2.Internal_Usage_SM2.Top.Top_Internal_Usage_24H import main as topmain_24h
 
-from Internal_Usage.Normal.Normal_Internal_Usage_1H import main as normalmain_1h
-from Internal_Usage.Normal.Normal_Internal_Usage_4H import main as normalmain_4h
-from Internal_Usage.Normal.Normal_Internal_Usage_5min import main as normalmain_5min
-from Internal_Usage.Normal.Normal_Internal_Usage_12H import main as normalmain_12h
-from Internal_Usage.Normal.Normal_Internal_Usage_24H import main as normalmain_24h
+from SageMaker_2.Internal_Usage_SM2.Normal.Normal_Internal_Usage_1H import main as normalmain_1h
+from SageMaker_2.Internal_Usage_SM2.Normal.Normal_Internal_Usage_4H import main as normalmain_4h
+from SageMaker_2.Internal_Usage_SM2.Normal.Normal_Internal_Usage_5min import main as normalmain_5min
+from SageMaker_2.Internal_Usage_SM2.Normal.Normal_Internal_Usage_12H import main as normalmain_12h
+from SageMaker_2.Internal_Usage_SM2.Normal.Normal_Internal_Usage_24H import main as normalmain_24h
 
-from Internal_Usage.Idle.Idle_Internal_Usage_1H import main as idlemain_1h
-from Internal_Usage.Idle.Idle_Internal_Usage_4H import main as idlemain_4h
-from Internal_Usage.Idle.Idle_Internal_Usage_5min import main as idlemain_5min
-from Internal_Usage.Idle.Idle_Internal_Usage_12H import main as idlemain_12h
-from Internal_Usage.Idle.Idle_Internal_Usage_24H import main as idlemain_24h
+from SageMaker_2.Internal_Usage_SM2.Idle.Idle_Internal_Usage_1H import main as idlemain_1h
+from SageMaker_2.Internal_Usage_SM2.Idle.Idle_Internal_Usage_4H import main as idlemain_4h
+from SageMaker_2.Internal_Usage_SM2.Idle.Idle_Internal_Usage_5min import main as idlemain_5min
+from SageMaker_2.Internal_Usage_SM2.Idle.Idle_Internal_Usage_12H import main as idlemain_12h
+from SageMaker_2.Internal_Usage_SM2.Idle.Idle_Internal_Usage_24H import main as idlemain_24h
 
-from External_Usage.Unfiltered.External_Usage_24H import main as exmain_24h
-from External_Usage.Unfiltered.External_Usage_12H import main as exmain_12h
-from External_Usage.Unfiltered.External_Usage_4H import main as exmain_4h
-from External_Usage.Unfiltered.External_Usage_1H import main as exmain_1h
+from SageMaker_2.External_Usage_SM2.Unfiltered.External_Usage_24H import main as exmain_24h
+from SageMaker_2.External_Usage_SM2.Unfiltered.External_Usage_12H import main as exmain_12h
+from SageMaker_2.External_Usage_SM2.Unfiltered.External_Usage_4H import main as exmain_4h
+from SageMaker_2.External_Usage_SM2.Unfiltered.External_Usage_1H import main as exmain_1h
 
-from External_Usage.Top.Top_External_Usage_1H import main as extopmain_1h
-from External_Usage.Top.Top_External_Usage_4H import main as extopmain_4h
-from External_Usage.Top.Top_External_Usage_12H import main as extopmain_12h
-from External_Usage.Top.Top_External_Usage_24H import main as extopmain_24h
+from SageMaker_2.External_Usage_SM2.Top.Top_External_Usage_1H import main as extopmain_1h
+from SageMaker_2.External_Usage_SM2.Top.Top_External_Usage_4H import main as extopmain_4h
+from SageMaker_2.External_Usage_SM2.Top.Top_External_Usage_12H import main as extopmain_12h
+from SageMaker_2.External_Usage_SM2.Top.Top_External_Usage_24H import main as extopmain_24h
 
-from External_Usage.Normal.Normal_External_Usage_1H import main as exnormalmain_1h
-from External_Usage.Normal.Normal_External_Usage_4H import main as exnormalmain_4h
-from External_Usage.Normal.Normal_External_Usage_12H import main as exnormalmain_12h
-from External_Usage.Normal.Normal_External_Usage_24H import main as exnormalmain_24h
+from SageMaker_2.External_Usage_SM2.Normal.Normal_External_Usage_1H import main as exnormalmain_1h
+from SageMaker_2.External_Usage_SM2.Normal.Normal_External_Usage_4H import main as exnormalmain_4h
+from SageMaker_2.External_Usage_SM2.Normal.Normal_External_Usage_12H import main as exnormalmain_12h
+from SageMaker_2.External_Usage_SM2.Normal.Normal_External_Usage_24H import main as exnormalmain_24h
 
-from External_Usage.Idle.Idle_External_Usage_1H import main as exidlemain_1h
-from External_Usage.Idle.Idle_External_Usage_4H import main as exidlemain_4h
-from External_Usage.Idle.Idle_External_Usage_12H import main as exidlemain_12h
-from External_Usage.Idle.Idle_External_Usage_24H import main as exidlemain_24h
+from SageMaker_2.External_Usage_SM2.Idle.Idle_External_Usage_1H import main as exidlemain_1h
+from SageMaker_2.External_Usage_SM2.Idle.Idle_External_Usage_4H import main as exidlemain_4h
+from SageMaker_2.External_Usage_SM2.Idle.Idle_External_Usage_12H import main as exidlemain_12h
+from SageMaker_2.External_Usage_SM2.Idle.Idle_External_Usage_24H import main as exidlemain_24h
 
-from On_Demand_Usage.OnDemand_24H import main as main_od24
+from SageMaker_2.On_Demand_Usage_SM2.OnDemand_24H import main as main_od24
+
+from CW.Internal_Usage_CW.Unflitered.Internal_Usage_1H import main as cwmain_1h
+from CW.Internal_Usage_CW.Unflitered.Internal_Usage_4H import main as cwmain_4h
+from CW.Internal_Usage_CW.Unflitered.Internal_Usage_5min import main as cwmain_5min
+from CW.Internal_Usage_CW.Unflitered.Internal_Usage_12H import main as cwmain_12h
+from CW.Internal_Usage_CW.Unflitered.Internal_Usage_24H import main as cwmain_24h
 
 load_dotenv()
 app = Flask(__name__)
@@ -761,3 +767,88 @@ def slack_od24h():
     return make_response("Processing your request...", 200)
 
 
+''' CW Unfiltered Internal Usages'''
+@app.route('/slack/CWUsage24h', methods=['POST'])
+def slack_cwusage24h():
+    # Validate the request from Slack
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    # Start a new thread to perform GPU usage calculations
+    thread = threading.Thread(target=cwmain_24h)
+    thread.start()
+
+
+
+    return make_response("Processing your request...", 200)
+@app.route('/slack/CWUsage12h', methods=['POST'])
+def slack_cwusage12h():
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    thread = threading.Thread(target=cwmain_12h)
+    thread.start()
+
+    return make_response("Processing your request...", 200)
+@app.route('/slack/CWUsage4h', methods=['POST'])
+def slack_cwusage4h():
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    thread = threading.Thread(target=cwmain_4h)
+    thread.start()
+
+    return make_response("Processing your request...", 200)
+@app.route('/slack/CWUsage1h', methods=['POST'])
+def slack_cwusage1h():
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    thread = threading.Thread(target=cwmain_1h)
+    thread.start()
+
+    return make_response("Processing your request...", 200)
+@app.route('/slack/CWUsage5min', methods=['POST'])
+def slack_cwusage5min():
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    thread = threading.Thread(target=cwmain_5min)
+    thread.start()
+
+    return make_response("Processing your request...", 200)
