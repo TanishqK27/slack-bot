@@ -233,7 +233,6 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     # Add a closing line
     full_message += "\nPlease take necessary actions to mitigate wastage."
-    full_message += f"\nWIP"
 
     return full_message, message_data, number, average_percentage_overall_gpu_util
 

@@ -158,8 +158,14 @@ def slack_5():
     if not hmac.compare_digest(hashed_req, signature):
         return make_response("Invalid request", 403)
 
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
     # Start a new thread to perform GPU usage calculations
-    thread = threading.Thread(target=main5)
+    user_id = request.form.get('user_id')
+
+    # Start a new thread to perform GPU usage calculations and pass the user_id
+    thread = threading.Thread(target=main6, args=(user_id,))
     thread.start()
 
     return make_response("Request received and is being processed...", 202)
