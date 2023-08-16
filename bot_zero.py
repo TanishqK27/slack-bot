@@ -22,13 +22,15 @@ DD_APP_KEY = os.environ.get("DD_APP_KEY")
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#proj-cluster-usage'
+CHANNEL_NAME = '#cluster-bot-testing'
 
 # Slack client
 client = slack.WebClient(token=API_TOKEN)
 
 
-def post_message(message):
+def post_message(message, user_id=None):
+    if user_id:
+        message = f"Here is the report you requested <@{user_id}> " + message
     response = client.chat_postMessage(channel=CHANNEL_NAME, text=message)
     assert response["ok"], f"Error posting message: {response['error']}"
 
@@ -241,7 +243,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 # Your existing code here
 # You should return project_info at the end of this function
 
-def main():
+def main(user_id=None):
     configuration = Configuration(api_key={
         'apiKeyAuth': DD_API_KEY,
         'appKeyAuth': DD_APP_KEY
@@ -354,7 +356,7 @@ def main():
     link = share_spreadsheet_with_link(spreadsheet)
 
     try:
-        post_message(message_data)
+        post_message(message_data, user_id)
     except Exception:
         print('Error')
 
