@@ -1,6 +1,16 @@
-
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from typing import List
+import os
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from datadog_api_client import ApiClient, Configuration
+from datadog_api_client.v1.api.metrics_api import MetricsApi
+from dotenv import load_dotenv
+import slack
+from gspread_formatting import *
 from flask import Flask
-
+import json
 app = Flask(__name__)
 
 
@@ -26,11 +36,7 @@ def main():
     
     """
 
-    try:
-        # Post the message to the Slack channel
-        response = slack_client.chat_postMessage(channel=SLACK_CHANNEL, text=report)
-    except Exception as e:
-        print(f"Error posting message: {str(e)}")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
