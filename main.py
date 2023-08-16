@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 
 
-@app.route('/slack/main', methods=['POST'])
+@app.route('/slack/help', methods=['POST'])
 def slack_help():
     # Validate the request from Slack
     timestamp = request.headers.get('X-Slack-Request-Timestamp')
