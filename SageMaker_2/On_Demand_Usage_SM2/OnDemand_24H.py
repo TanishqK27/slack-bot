@@ -245,7 +245,7 @@ def main():
         )
 
     SLACK_TOKEN = os.getenv("SLACK_BOT_TOKEN")
-    SLACK_CHANNEL = "#proj-cluster-usage"
+    SLACK_CHANNEL = "#cluster-bot-testing-usage"
     slack_client = slack.WebClient(token=SLACK_TOKEN)
 
     # Get the metrics
