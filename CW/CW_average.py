@@ -54,7 +54,7 @@ def print_overall_usage_stats(a):
 
     average_percentage_overall_gpu_util = (percentage - 48000) / 3500
 
-    return percentage
+    return average_percentage_overall_gpu_util
 def main():
     load_dotenv()
 
