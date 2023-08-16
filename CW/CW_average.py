@@ -50,7 +50,7 @@ def print_overall_usage_stats(a):
             if hasattr(point, 'value') and point.value[1] is not None:
                 overall_gpu_sum += point.value[1]
 
-    percentage = overall_gpu_sum / overall_gpu_count
+    percentage = overall_gpu_sum
 
     average_percentage_overall_gpu_util = (percentage - 48000) / 3500
 
