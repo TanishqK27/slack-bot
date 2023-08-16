@@ -36,6 +36,7 @@ def slack_help():
     user_id = request.form.get('user_id')
 
     # Start a new thread to perform GPU usage calculations
+    channel_id = request.form.get('channel_id')
     thread = threading.Thread(target=help1, args=(user_id,))
     thread.start()
 
