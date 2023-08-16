@@ -45,8 +45,10 @@ def print_overall_usage_stats(response):
     total_points = 0
     for series in response['series']:
         for point in series['pointlist']:
-            total_value += point[1]  # The value is typically the second item in the point tuple
-            total_points += 1
+            # Check if point has an attribute named 'value'
+            if hasattr(point, 'value'):
+                total_value += point.value
+                total_points += 1
     average_value = total_value / total_points if total_points > 0 else 0
 
     # Calculate percentage using the extracted average value
