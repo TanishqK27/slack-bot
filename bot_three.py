@@ -216,6 +216,17 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             f"{int(result['total_gpu_usage_time_hours'][result['project_name']]):.0f}"  # No decimal places for hours
         )
         messages.append(message)
+    overall_report = f"*LAST INTERNAL (SM2, g80) 24H GPU UTILISATION REPORT*\n\n"
+    overall_report += "*Overview:*\n"
+    overall_report += "This report shows the overall GPU utilization statistics across the g80 SageMaker 2 cluster in the last 24 hours.\n\n"
+    overall_report += "Overall GPU Utilization:\n"
+    overall_report += f"*- Average GPU power draw across all projects:*  {number:.2f} watts\n"
+
+    overall_report += f'*- Average percentage GPU usage:* {average_percentage_overall_gpu_util:.2f}%\n'
+
+    overall_report += f"*Table which shows the top 10 projects*\n"
+    overall_report += f"*This table shows Project Name, Percentage GPU Utilisation, Number of Nodes Used and Number of Hours Run*\n"
+    overall_report += f'Note the empty project name is idle, unused nodes.'
 
     # Join the messages together
 
@@ -223,7 +234,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     # Add a closing line
     full_message += "\nPlease take necessary actions to mitigate wastage."
-    full_message += f"\nCheck out the full report: https://docs.google.com/spreadsheets/d/1bUeb7Vl95sdE8SP2QeheSgZfdJK3FMqyY-Pme3Gz1MI/edit?usp=sharing"
+    full_message += f"\nWIP"
 
     return full_message, message_data, number, average_percentage_overall_gpu_util
 
