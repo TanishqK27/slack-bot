@@ -260,14 +260,14 @@ def main():
         sum_response = api_instance.query_metrics(
             int((datetime.now() + relativedelta(hours=-1)).timestamp()),
             int(datetime.now().timestamp()),
-            "sum:dcgm.power_usage{qos:idle,availability-zone:sagemaker2} by {project}"
+            "sum:dcgm.power_usage{qos:idle,availability-zone:cw-prod} by {project}"
         )
     with ApiClient(configuration) as api_client:
         api_instance = MetricsApi(api_client)
         avg_response = api_instance.query_metrics(
             int((datetime.now() + relativedelta(hours=-1)).timestamp()),
             int(datetime.now().timestamp()),
-            "avg:dcgm.power_usage{qos:idle,availability-zone:sagemaker2} by {project}"
+            "avg:dcgm.power_usage{qos:idle,availability-zone:cw-prod} by {project}"
         )
 
     with ApiClient(configuration) as api_client:
@@ -275,7 +275,7 @@ def main():
         overall_response = api_instance.query_metrics(
             int((datetime.now() + relativedelta(hours=-1)).timestamp()),
             int(datetime.now().timestamp()),
-            "abs(avg:dcgm.power_usage{qos:idle,availability-zone:sagemaker2})"
+            "abs(avg:dcgm.power_usage{qos:idle,availability-zone:cw-prod})"
         )
 
     message_data, gpu_usage_info, number, average_percentage_overall_gpu_util = calculate_gpu_usage_info(avg_response,
