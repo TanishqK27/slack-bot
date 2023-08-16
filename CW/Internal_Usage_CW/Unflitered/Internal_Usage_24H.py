@@ -180,6 +180,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             if hasattr(point, 'value') and point.value[1] is not None:
                 overall_gpu_sum += point.value[1]
 
+
+
     number = overall_gpu_sum / overall_gpu_count
 
     average_percentage_overall_gpu_util = (number - 48) / 3.5

@@ -58,6 +58,9 @@ from CW.Internal_Usage_CW.Unflitered.Internal_Usage_5min import main as cwmain_5
 from CW.Internal_Usage_CW.Unflitered.Internal_Usage_12H import main as cwmain_12h
 from CW.Internal_Usage_CW.Unflitered.Internal_Usage_24H import main as cwmain_24h
 
+
+from CW.CW_average import main as cwavgmain
+
 load_dotenv()
 app = Flask(__name__)
 
@@ -849,6 +852,24 @@ def slack_cwusage5min():
         return make_response("Invalid request", 403)
 
     thread = threading.Thread(target=cwmain_5min)
+    thread.start()
+
+    return make_response("Processing your request...", 200)
+
+
+@app.route('/slack/cwavgsage24h', methods=['POST'])
+def slack_cwavgsage24h():
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    signature = request.headers.get('X-Slack-Signature')
+    req = str.encode(f"v0:{timestamp}:{request.get_data().decode()}")
+
+    slack_signing_secret = bytes(os.getenv('SLACK_SIGNING_SECRET'), 'utf-8')
+    hashed_req = 'v0=' + hmac.new(slack_signing_secret, req, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hashed_req, signature):
+        return make_response("Invalid request", 403)
+
+    thread = threading.Thread(target=cwavgmain)
     thread.start()
 
     return make_response("Processing your request...", 200)
