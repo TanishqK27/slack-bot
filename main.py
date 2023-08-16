@@ -162,6 +162,8 @@ def slack_5():
     thread = threading.Thread(target=main5)
     thread.start()
 
+    return make_response("Request received and is being processed...", 202)
+
 
 @app.route('/slack/6', methods=['POST'])
 def slack_6():
