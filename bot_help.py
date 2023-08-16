@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#cluster-bot-testing'
+CHANNEL_NAME = '#proj-cluster-usage'
 
 # Slack client
 client = slack.WebClient(token=API_TOKEN)
@@ -30,19 +30,19 @@ def main():
 
     # Create the report
     message_data = f"""
-    *CLUSTER USAGE BOT USER GUIDE*:
+*CLUSTER USAGE BOT USER GUIDE*:
     
-    This is a cluster bot, that will give a daily report on all projects, giving overall usage details, and 
-    showing the Project Name, %GPU Utilisation, Number of Nodes Used and Number of Hours Run in the last 24H.
-    In order to filter, you can use the following slash commands to see more:
+This is a cluster bot, that will give a daily report on all projects, giving overall usage details, and 
+showing the Project Name, %GPU Utilisation, Number of Nodes Used and Number of Hours Run in the last 24H.
+In order to filter, you can use the following slash commands to see more:
     
-    /0: Last 24H Report for all projects
-    /1: Last 24H Report for all internal projects on SM2
-    /2: Last 24H Report for all internal projects on SM2 (g40)
-    /3: Last 24H Report for all internal projects on SM2 (g80)
-    /4: Last 24H Report for all external projects on External Cluster
-    /5: Last 24H Report for ClipDrop inference on CW Cluster
-    /6: Last 24H Report for On Demand Cluster Usage
+*/0:* Last 24H Report for all projects
+*/1:* Last 24H Report for all internal projects on SM2
+*/2:* Last 24H Report for all internal projects on SM2 (g40)
+*/3:* Last 24H Report for all internal projects on SM2 (g80)
+*/4:* Last 24H Report for all external projects on External Cluster
+*/5:* Last 24H Report for ClipDrop inference on CW Cluster
+*/6:* Last 24H Report for On Demand Cluster Usage
     
 
     
