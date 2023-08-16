@@ -52,7 +52,7 @@ def print_overall_usage_stats(a):
 
     percentage = overall_gpu_sum/overall_gpu_count
 
-    average_percentage_overall_gpu_util = (percentage - 48) / 3.5
+    average_percentage_overall_gpu_util = (percentage - 48000) / 3500
 
     return average_percentage_overall_gpu_util
 def main():
