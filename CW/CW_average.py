@@ -39,20 +39,20 @@ configuration = Configuration(api_key={
 configuration.host = f"https://api.{DD_SITE}"
 
 
-def print_overall_usage_stats(b):
+def print_overall_usage_stats(a):
     # Extract average value from MetricsQueryResponse
     overall_gpu_count = 0
     overall_gpu_sum = 0
-    for series_data in b['series']:
+    for series_data in a['series']:
         pointlist = series_data['pointlist']
         for point in pointlist:
             overall_gpu_count += 1
             if hasattr(point, 'value') and point.value[1] is not None:
                 overall_gpu_sum += point.value[1]
 
-    percentage = overall_gpu_sum
+    percentage = overall_gpu_sum/overall_gpu_count
 
-    average_percentage_overall_gpu_util = (percentage - 48000) / 3500
+    average_percentage_overall_gpu_util = (percentage - 48) / 3.5
 
     return average_percentage_overall_gpu_util
 def main():
