@@ -39,11 +39,20 @@ configuration = Configuration(api_key={
 configuration.host = f"https://api.{DD_SITE}"
 
 
+def print_overall_usage_stats(response):
+    # Extract average value from MetricsQueryResponse
+    total_value = 0
+    total_points = 0
+    for series in response['series']:
+        for point in series['pointlist']:
+            total_value += point[1]  # The value is typically the second item in the point tuple
+            total_points += 1
+    average_value = total_value / total_points if total_points > 0 else 0
 
-def print_overall_usage_stats(a):
-
-    percentage = (a - 48000) / 3500
+    # Calculate percentage using the extracted average value
+    percentage = (average_value - 48000) / 3500
     print(percentage)
+
     return percentage
 def main():
     load_dotenv()
