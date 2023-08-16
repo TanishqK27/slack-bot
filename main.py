@@ -5,15 +5,15 @@ import hashlib
 import hmac
 import threading
 
-from help import main as help1
+from bot_help import main as help1
 
-from zero import main as main0
-from one import main as main1
-from two import main as main2
-from three import main as main3
-from four import main as main4
+from bot_zero import main as main0
+from bot_one import main as main1
+from bot_two import main as main2
+from bot_three import main as main3
+from bot_four import main as main4
 #from five import main as main5
-from six import main as main6
+from bot_six import main as main6
 
 load_dotenv()
 app = Flask(__name__)
