@@ -19,7 +19,6 @@ load_dotenv()
 app = Flask(__name__)
 
 
-
 @app.route('/slack/help', methods=['POST'])
 def slack_help():
     # Validate the request from Slack
@@ -33,8 +32,11 @@ def slack_help():
     if not hmac.compare_digest(hashed_req, signature):
         return make_response("Invalid request", 403)
 
+    # Extract user_id from the incoming Slack payload
+    user_id = request.form.get('user_id')
+
     # Start a new thread to perform GPU usage calculations
-    thread = threading.Thread(target=help1)
+    thread = threading.Thread(target=help1, args=(user_id,))
     thread.start()
 
     return make_response("Request received and is being processed", 202)

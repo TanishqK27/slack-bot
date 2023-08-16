@@ -9,14 +9,19 @@ from datadog_api_client.v1.api.metrics_api import MetricsApi
 from dotenv import load_dotenv
 import slack
 from gspread_formatting import *
-from flask import Flask
+from flask import Flask, request, jsonify
 import json
+import os
+from slack import WebClient
+
 app = Flask(__name__)
 
+slack_token = os.environ["SLACK_API_TOKEN"]
+slack_client = WebClient(token=slack_token)
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#proj-cluster-usage'
+CHANNEL_NAME = '#cluster-bot-testing'
 
 # Slack client
 client = slack.WebClient(token=API_TOKEN)
@@ -26,10 +31,13 @@ def post_message(message):
     response = client.chat_postMessage(channel=CHANNEL_NAME, text=message)
     assert response["ok"], f"Error posting message: {response['error']}"
 
-def main():
+def main(user_id):
 
     # Create the report
     message_data = f"""
+    
+<@{user_id}> here is the requested report:
+
 *CLUSTER USAGE BOT USER GUIDE*:
     
 This is a cluster bot, that will give a daily report on all projects, giving overall usage details, and 
@@ -47,6 +55,12 @@ In order to filter, you can use the following slash commands to see more:
 
     
     """
+    # Get the channel ID from the incoming Slack payload
+    channel_id = request.form.get('channel_id')
+
+    # Send the report to the channel using Slack API
+    slack_client.chat_postMessage(channel=channel_id, text=message_data)
+
 
     try:
         post_message(message_data)
