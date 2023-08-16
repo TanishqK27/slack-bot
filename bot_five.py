@@ -218,17 +218,15 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             f"{int(result['total_gpu_usage_time_hours'][result['project_name']]):.0f}"  # No decimal places for hours
         )
         messages.append(message)
-    overall_report = f"*LAST OVERALL 24H GPU UTILISATION REPORT*\n\n"
+    overall_report = f"*LAST OVERALL 24H CW GPU UTILISATION REPORT*\n\n"
     overall_report += "*Overview:*\n"
-    overall_report += "This report shows the overall GPU utilization statistics across all clusters in the last 24 hours.\n\n"
+    overall_report += "This report shows the overall GPU utilization statistics the CoreWeave cluster in the last 24 hours.\n"
+    overall_report += "Note that CW is only running ClipDrop inference, no other projects, users or jobs run on it.\n\n"
     overall_report += "Overall GPU Utilization:\n"
-    overall_report += f"*- Average GPU power draw across all projects:*  {number:.2f} watts\n"
+    overall_report += f"*- Average GPU power draw across all projects:*  {number/1000:.2f} watts\n"
 
     overall_report += f'*- Average percentage GPU usage:* {average_percentage_overall_gpu_util:.2f}%\n'
 
-    overall_report += f"*Table which shows the top 10 projects*\n"
-    overall_report += f"*This table shows Project Name, Percentage GPU Utilisation, Number of Nodes Used and Number of Hours Run*\n"
-    overall_report += f'Note the empty project name is idle, unused nodes.'
     # Join the messages together
 
     full_message = overall_report
