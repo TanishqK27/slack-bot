@@ -22,7 +22,7 @@ DD_APP_KEY = os.environ.get("DD_APP_KEY")
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#proj-cluster-usage'
+CHANNEL_NAME = '#cluster-bot-testing'
 
 # Slack client
 client = slack.WebClient(token=API_TOKEN)
@@ -33,7 +33,6 @@ def post_message(message, user_id=None):
         message = f"Here is the report you requested <@{user_id}> \n" + message
     response = client.chat_postMessage(channel=CHANNEL_NAME, text=message)
     assert response["ok"], f"Error posting message: {response['error']}"
-
 
 def open_and_fill_spreadsheet(data: List[List[str]], sheet_name: str) -> gspread.Spreadsheet:
     # Use the OAuth2 credentials to authorize gspread
@@ -79,13 +78,19 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     total_nodes = 0
     overall_gpu_sum = 0
     overall_gpu_count = 0
+
+    weighted_nodes_total = 0
     # To store the information for each project
 
     # Calculate average GPU usage and total GPU usage for all data points in avg_response and sum_response respectively
     for series_data in avg_response['series']:
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
         pointlist = series_data['pointlist']
-        if project_name == 'music_gen':
+        if not project_name:
+            project_name = 'idle'
+
+    # If project_name contains "_", skip this project
+        if "_" in project_name:
             continue
 
         total_gpu_sum = 0  # To store the total GPU usage for the project
@@ -106,7 +111,11 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
 
         pointlist = series_data['pointlist']
-        if project_name == 'music_gen':
+        if not project_name:
+            project_name = 'idle'
+
+    # If project_name contains "_", skip this project
+        if "_" in project_name:
             continue
 
         total_gpu_usage_sum[project_name] = 0
@@ -173,13 +182,21 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             })
 
     for series_data in overall_response['series']:
+        project_name = series_data['expression'].split('{project:')[1].split(',')[0]
         pointlist = series_data['pointlist']
-        if project_name == 'music_gen':
+        if not project_name:
+            project_name = 'idle'
+
+    # If project_name contains "_", skip this project
+        if "_" in project_name:
             continue
+
         for point in pointlist:
             overall_gpu_count += 1
             if hasattr(point, 'value') and point.value[1] is not None:
                 overall_gpu_sum += point.value[1]
+
+
 
     number = overall_gpu_sum / overall_gpu_count
 
@@ -197,7 +214,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     message_data = project_info.copy()
 
     # Get the maximum length of project_name for pretty formatting
-    max_name_length = max(len(result['project_name']) for result in project_info[:20])
+    max_name_length = max(len(result['project_name']) for result in project_info)
 
     # Define the format string for the table rows, taking into account the max_name_length
     row_format = "{:<11} | {:>4} | {:>3} | {:>2}"
@@ -206,19 +223,21 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     header = row_format.format('Project Name', '%GPU', 'Nod', 'Hr')
     header += "\n" + "-" * len(header)  # Add a line under the header
 
+    for result in project_info:
+        if result['project_name'] != "music_gen":
+            weighted_nodes_for_project = result['nodes_used'] * (
+                        result['total_gpu_usage_time_hours'][result['project_name']] / 24)
+            weighted_nodes_total += weighted_nodes_for_project
     # Format the project information
     messages = [header]
-
     total_nodes = sum([result['nodes_used'] for result in project_info if result['project_name'] != 'music_gen'])
     ovrcluster_message = row_format.format(
         "OvrCluster",
         f"{average_percentage_overall_gpu_util:.0f}%",
-        str(total_nodes),
+        str(int(weighted_nodes_total)),  # Use the total weighted nodes for OvrCluster
         "24"
     )
     messages.append(ovrcluster_message)
-
-
     for result in project_info:
         # Only take the first 10 results
         message = row_format.format(
@@ -228,9 +247,9 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             f"{int(result['total_gpu_usage_time_hours'][result['project_name']]):.0f}"  # No decimal places for hours
         )
         messages.append(message)
-    overall_report = f"*LAST OVERALL 24H GPU UTILISATION REPORT*\n\n"
+    overall_report = f"*LAST INTERNAL (SM2, g40) 24H GPU UTILISATION REPORT*\n\n"
     overall_report += "*Overview:*\n"
-    overall_report += "This report shows the overall GPU utilization statistics across all clusters in the last 24 hours.\n\n"
+    overall_report += "This report shows the overall GPU utilization statistics across the g40 SageMaker 2 cluster in the last 24 hours.\n\n"
     overall_report += "Overall GPU Utilization:\n"
     overall_report += f"*- Average GPU power draw across all projects:*  {number:.2f} watts\n"
 
@@ -280,7 +299,7 @@ def main(user_id=None):
         overall_response = api_instance.query_metrics(
             int((datetime.now() + relativedelta(days=-1)).timestamp()),
             int(datetime.now().timestamp()),
-            "abs(avg:dcgm.power_usage{availability-zone:*})"
+            "abs(avg:dcgm.power_usage{*})"
         )
 
     message_data, gpu_usage_info, number, average_percentage_overall_gpu_util = calculate_gpu_usage_info(avg_response,
