@@ -65,6 +65,16 @@ def share_spreadsheet_with_link(spreadsheet: gspread.Spreadsheet) -> str:
     # Return the URL of the Google Sheets file
     return f"https://docs.google.com/spreadsheets/d/{spreadsheet.id}/edit"
 
+def should_process_project(project_name: str) -> bool:
+    """Check if the project should be processed."""
+    # Skip projects with "_" or named "music_gen"
+    if "_" in project_name or project_name == 'music_gen':
+        return False
+    return True
+
+def get_valid_project_name(project_name: str) -> str:
+    """Return a valid project name. If empty, return 'idle'."""
+    return project_name if project_name else "idle"
 
 def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     waste_rate_total = 0
@@ -85,10 +95,11 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     for series_data in avg_response['series']:
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
         pointlist = series_data['pointlist']
-        if "_" in project_name or project_name == 'music_gen':
-            continue     # If project name is empty, set it to "idle"
-        if not project_name:
-            project_name = "idle"
+        if not should_process_project(project_name):
+            continue
+
+            # Get the valid project name (convert empty names to "idle")
+        project_name = get_valid_project_name(project_name)
 
         total_gpu_sum = 0  # To store the total GPU usage for the project
         num_points = len(pointlist)  # To store the total number of data points for the project
@@ -108,13 +119,11 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
 
         pointlist = series_data['pointlist']
-        if "_" in project_name or project_name == 'music_gen':
+        if not should_process_project(project_name):
             continue
 
-            # If project name is empty, set it to "idle"
-        if not project_name:
-            project_name = "idle"
-
+            # Get the valid project name (convert empty names to "idle")
+        project_name = get_valid_project_name(project_name)
         total_gpu_usage_sum[project_name] = 0
         total_data_points[project_name] = 0
 
@@ -181,14 +190,11 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     for series_data in overall_response['series']:
         pointlist = series_data['pointlist']
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
-
-        # If project name contains "_" or is "music_gen", skip it
-        if "_" in project_name or project_name == 'music_gen':
+        if not should_process_project(project_name):
             continue
 
-        # If project name is empty, set it to "idle"
-        if not project_name:
-            project_name = "idle"
+            # Get the valid project name (convert empty names to "idle")
+        project_name = get_valid_project_name(project_name)
         for point in pointlist:
             overall_gpu_count += 1
             if hasattr(point, 'value') and point.value[1] is not None:
@@ -321,12 +327,11 @@ def main(user_id=None):
     data.append(['Project Name', '% GPU Usage', 'Nodes Used', 'Hours'])
 
     for result in gpu_usage_info:
-        if "_" in result['project_name'] or result['project_name'] == 'music_gen':
+        if not should_process_project(project_name):
             continue
 
-            # If project name is empty, set it to "idle"
-        if not result['project_name']:
-            result['project_name'] = "idle"
+            # Get the valid project name (convert empty names to "idle")
+        project_name = get_valid_project_name(project_name)
         data.append([
             result['project_name'],
             f"{result['percentage_gpu_usage']:.2f}%",
