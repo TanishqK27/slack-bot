@@ -22,7 +22,7 @@ DD_APP_KEY = os.environ.get("DD_APP_KEY")
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#proj-cluster-usage-usage'
+CHANNEL_NAME = '#cluster-bot-testing-usage'
 
 
 # Slack client
@@ -202,7 +202,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     message_data = project_info.copy()
 
     # Get the maximum length of project_name for pretty formatting
-    max_name_length = max(len(result['project_name']) for result in project_info[:10])
+    max_name_length = max(len(result['project_name']) for result in project_info)
 
     # Define the format string for the table rows, taking into account the max_name_length
     row_format = "{:<11} | {:>4} | {:>3} | {:>2}"
@@ -214,7 +214,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     # Format the project information
     messages = [header]
 
-    for result in project_info[:10]:
+    for result in project_info:
         # Only take the first 10 results
         message = row_format.format(
             result['project_name'][:11],  # Truncate project_name to 15 characters
@@ -233,7 +233,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     overall_report += f'*- Average percentage GPU usage:* {average_percentage_overall_gpu_util:.2f}%\n'
 
-    overall_report += f"*Table which shows the top 10 projects*\n"
+    overall_report += f"*Table*\n"
     overall_report += f'Note the empty project name is idle, unused nodes.'
     # Join the messages together
 
@@ -294,7 +294,7 @@ def main():
     data.append(["Overall GPU Utilization:"])
     data.append([f"- Average GPU power draw across all projects:  {number:.2f} watts"])
     data.append([f'- Average percentage GPU usage: {average_percentage_overall_gpu_util:.2f}%'])
-    data.append(["Table which shows the top 10 projects"])
+    data.append(["Table"])
     data.append(["Note the empty project name is idle, unused nodes."])
 
     # Add an empty row for spacing
@@ -303,7 +303,7 @@ def main():
     # Add the table headers
     data.append(['Project Name', '% GPU Usage', 'Nodes Used', 'Hours'])
 
-    for result in gpu_usage_info[:10]:
+    for result in gpu_usage_info:
         data.append([
             result['project_name'],
             f"{result['percentage_gpu_usage']:.2f}%",

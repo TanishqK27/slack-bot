@@ -236,7 +236,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     overall_report += f'*- Average percentage GPU usage:* {average_percentage_overall_gpu_util:.2f}%\n'
 
-    overall_report += f"*Table which shows the top 10 projects*\n"
+    overall_report += f"*Table*\n"
     overall_report += f"*This table shows Project Name, Percentage GPU Utilisation, Number of Nodes Used and Number of Hours Run*\n"
     overall_report += f'Note the empty project name is idle, unused nodes.'
     # Join the messages together
@@ -298,7 +298,7 @@ def main(user_id=None):
     data.append(["Overall GPU Utilization:"])
     data.append([f"- Average GPU power draw across all projects:  {number:.2f} watts"])
     data.append([f'- Average percentage GPU usage: {average_percentage_overall_gpu_util:.2f}%'])
-    data.append(["Table which shows the top 10 projects"])
+    data.append(["Table"])
     data.append(["Note the empty project name is idle, unused nodes."])
 
     # Add an empty row for spacing
@@ -307,7 +307,7 @@ def main(user_id=None):
     # Add the table headers
     data.append(['Project Name', '% GPU Usage', 'Nodes Used', 'Hours'])
 
-    for result in gpu_usage_info[:10]:
+    for result in gpu_usage_info:
         if result['project_name'] == 'music_gen':
             continue
         data.append([
