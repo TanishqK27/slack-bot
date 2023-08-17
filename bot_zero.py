@@ -22,7 +22,7 @@ DD_APP_KEY = os.environ.get("DD_APP_KEY")
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#proj-cluster-usage'
+CHANNEL_NAME = '#cluster-bot-testing'
 
 # Slack client
 client = slack.WebClient(token=API_TOKEN)
@@ -197,7 +197,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     message_data = project_info.copy()
 
     # Get the maximum length of project_name for pretty formatting
-    max_name_length = max(len(result['project_name']) for result in project_info[:10])
+    max_name_length = max(len(result['project_name']) for result in project_info[:20])
 
     # Define the format string for the table rows, taking into account the max_name_length
     row_format = "{:<11} | {:>4} | {:>3} | {:>2}"
@@ -208,6 +208,9 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     # Format the project information
     messages = [header]
+
+    total_nodes = sum([result['nodes_used'] for result in project_info if result['project_name'] != 'music_gen'])
+    messages.append(['OvrCluster', f"{average_percentage_overall_gpu_util:.2f}%", total_nodes, "24"])
 
     for result in project_info[:10]:
         # Only take the first 10 results
