@@ -210,7 +210,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     messages = [header]
 
     total_nodes = sum([result['nodes_used'] for result in project_info if result['project_name'] != 'music_gen'])
-    messages.append(['OvrCluster', f"{average_percentage_overall_gpu_util:.2f}%", total_nodes, "24"])
+    message = f"OvrCluster {average_percentage_overall_gpu_util:.2f}% {total_nodes} 24"
+    messages.append(message)
 
     for result in project_info[:10]:
         # Only take the first 10 results
