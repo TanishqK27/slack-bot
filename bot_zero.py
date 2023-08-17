@@ -212,7 +212,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     total_nodes = sum([result['nodes_used'] for result in project_info if result['project_name'] != 'music_gen'])
     ovrcluster_message = row_format.format(
         "OvrCluster",
-        f"{average_percentage_overall_gpu_util:.2f}%",
+        f"{average_percentage_overall_gpu_util:.0f}%",
         str(total_nodes),
         "24"
     )
