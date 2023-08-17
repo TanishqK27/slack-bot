@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#cluster-bot-testing'
+CHANNEL_NAME = '#proj-cluster-usage'
 
 # Slack client
 slack_client = slack.WebClient(token=API_TOKEN)

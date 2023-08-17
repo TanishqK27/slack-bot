@@ -22,7 +22,7 @@ DD_APP_KEY = os.environ.get("DD_APP_KEY")
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#cluster-bot-testing-usage'
+CHANNEL_NAME = '#proj-cluster-usage-usage'
 
 # Slack client
 client = slack.WebClient(token=API_TOKEN)
@@ -232,7 +232,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     overall_report += f'*- Average percentage GPU usage:* {average_percentage_overall_gpu_util:.2f}%\n'
 
-    overall_report += f"*cluster-bot-testing*\n"
+    overall_report += f"*proj-cluster-usage*\n"
     overall_report += f'Note the empty project name is idle, unused nodes.'
     # Join the messages together
 
@@ -293,7 +293,7 @@ def main():
     data.append(["Overall GPU Utilization:"])
     data.append([f"- Average GPU power draw across all projects:  {number:.2f} watts"])
     data.append([f'- Average percentage GPU usage: {average_percentage_overall_gpu_util:.2f}%'])
-    data.append(["cluster-bot-testing"])
+    data.append(["proj-cluster-usage"])
     data.append(["Note the empty project name is idle, unused nodes."])
 
     # Add an empty row for spacing
