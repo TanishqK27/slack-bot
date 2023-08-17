@@ -219,7 +219,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     messages.append(ovrcluster_message)
 
 
-    for result in project_info[:20]:
+    for result in project_info:
         # Only take the first 10 results
         message = row_format.format(
             result['project_name'][:11],  # Truncate project_name to 15 characters
