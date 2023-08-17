@@ -299,7 +299,7 @@ def main(user_id=None):
         overall_response = api_instance.query_metrics(
             int((datetime.now() + relativedelta(days=-1)).timestamp()),
             int(datetime.now().timestamp()),
-            "abs(avg:dcgm.power_usage{*})"
+            "abs(avg:dcgm.power_usage{availability-zone:*})"
         )
 
     message_data, gpu_usage_info, number, average_percentage_overall_gpu_util = calculate_gpu_usage_info(avg_response,
