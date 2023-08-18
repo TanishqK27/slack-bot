@@ -160,7 +160,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         dollars_wasted_total += dollars_wasted
         # Save the project information
         if '_' not in project_name:
-            if project_name == '':
+            if not project_name:
                 project_name = "idle"
             project_info.append({
 
@@ -226,7 +226,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             result['project_name'][:11],  # Truncate project_name to 15 characters
             f"{result['percentage_gpu_usage']:.0f}%",  # No decimal places for percentage
             f"{result['nodes_used']}",
-            f"{int(result['total_gpu_usage_time_hours'][result['project_name']]):.0f}"  # No decimal places for hours
+            f"{int(result['total_gpu_usage_time_hours'].get(result['project_name'], 0)):.0f}" # No decimal places for hours
         )
         messages.append(message)
     overall_report = f"*LAST OVERALL 24H GPU UTILISATION REPORT*\n\n"
