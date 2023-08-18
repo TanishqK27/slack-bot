@@ -79,6 +79,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     total_nodes = 0
     overall_gpu_sum = 0
     overall_gpu_count = 0
+    modified_ovrcluster_nodes = 0
     # To store the information for each project
 
     # Calculate average GPU usage and total GPU usage for all data points in avg_response and sum_response respectively
@@ -218,11 +219,16 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     # Format the project information
     messages = [header]
 
-    total_nodes = sum([result['nodes_used'] for result in project_info if result['project_name'] != 'music_gen'])
+    for result in project_info:
+        hours_run = result['total_gpu_usage_time_hours'].get(result['project_name'], 0)
+        nodes_for_project = result['nodes_used']
+        modified_ovrcluster_nodes += nodes_for_project * (hours_run / 24)
+        modified_ovrcluster_nodes = round(modified_ovrcluster_nodes)
+
     ovrcluster_message = row_format.format(
         "OvrCluster",
         f"{average_percentage_overall_gpu_util:.0f}%",
-        str(total_nodes),
+        str(modified_ovrcluster_nodes),
         "24"
     )
     messages.append(ovrcluster_message)

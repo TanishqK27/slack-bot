@@ -79,6 +79,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     total_nodes = 0
     overall_gpu_sum = 0
     overall_gpu_count = 0
+    modified_ovrcluster_nodes = 0
     ovrcluster_nodes = 0
     # To store the information for each project
 
@@ -217,7 +218,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     # Format the project information
     messages = [header]
 
-    modified_ovrcluster_nodes = 0
+
     for result in project_info:
         hours_run = result['total_gpu_usage_time_hours'].get(result['project_name'], 0)
         nodes_for_project = result['nodes_used']
