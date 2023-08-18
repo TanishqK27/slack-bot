@@ -22,7 +22,7 @@ DD_APP_KEY = os.environ.get("DD_APP_KEY")
 
 # Slack credentials
 API_TOKEN = os.getenv('SLACK_BOT_TOKEN')
-CHANNEL_NAME = '#proj-cluster-usage'
+CHANNEL_NAME = '#cluster-bot-testing'
 
 # Slack client
 client = slack.WebClient(token=API_TOKEN)
@@ -217,12 +217,13 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         hours_run = result['total_gpu_usage_time_hours'].get(result['project_name'], 0)
         nodes_for_project = result['nodes_used']
         modified_ovrcluster_nodes += nodes_for_project * (hours_run / 24)
-        modified_ovrcluster_nodes = round(modified_ovrcluster_nodes*1.413)
+        modified_ovrcluster_nodes = modified_ovrcluster_nodes*1.413
+
 
     ovrcluster_message = row_format.format(
         "OvrCluster",
         f"{average_percentage_overall_gpu_util:.0f}%",
-        str(modified_ovrcluster_nodes),
+        str(round(modified_ovrcluster_nodes)),
         "24"
     )
     messages.append(ovrcluster_message)
