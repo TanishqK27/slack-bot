@@ -79,6 +79,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     total_nodes = 0
     overall_gpu_sum = 0
     overall_gpu_count = 0
+    ovrcluster_nodes = 0
     # To store the information for each project
 
     # Calculate average GPU usage and total GPU usage for all data points in avg_response and sum_response respectively
@@ -109,6 +110,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         if project_name == 'music_gen':
             continue
 
+
         total_gpu_usage_sum[project_name] = 0
         total_data_points[project_name] = 0
 
@@ -119,6 +121,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
         # Calculate the total GPU usage time in hours for each project
         project_pointlist = []
+
+
 
         for point in pointlist:
             if hasattr(point, 'value') and point.value[1] is not None:
@@ -153,6 +157,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
         a = (avg_gpu_usage[project_name])
         b = (total_gpu_usage_sum[project_name] / total_data_points[project_name])
+
+
         # Calculate Waste Rate
         waste_rate = (1 - ((a - 48) / 350)) * b / a * 1.3
         waste_rate_total += waste_rate
@@ -211,11 +217,16 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     # Format the project information
     messages = [header]
 
-    total_nodes = sum([result['nodes_used'] for result in project_info if result['project_name'] != 'music_gen'])
+    modified_ovrcluster_nodes = 0
+    for result in project_info:
+        hours_run = result['total_gpu_usage_time_hours'].get(result['project_name'], 0)
+        nodes_for_project = result['nodes_used']
+        modified_ovrcluster_nodes += nodes_for_project * (hours_run / 24)
+
     ovrcluster_message = row_format.format(
         "OvrCluster",
         f"{average_percentage_overall_gpu_util:.0f}%",
-        str(total_nodes),
+        str(modified_ovrcluster_nodes),
         "24"
     )
     messages.append(ovrcluster_message)
