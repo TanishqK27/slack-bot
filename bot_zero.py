@@ -69,6 +69,7 @@ def share_spreadsheet_with_link(spreadsheet: gspread.Spreadsheet) -> str:
 def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     waste_rate_total = 0
     dollars_wasted_total = 0
+    modified_ovrcluster_nodes = 0
     percentage_total = 0
     project_info = []
     total_gpu_usage_sum = {}  # To store the total GPU usage for each project in sum_response
@@ -211,15 +212,19 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     # Format the project information
     messages = [header]
 
-    total_nodes = sum([result['nodes_used'] for result in project_info if result['project_name'] != 'music_gen'])
+
+    for result in project_info:
+        hours_run = result['total_gpu_usage_time_hours'].get(result['project_name'], 0)
+        nodes_for_project = result['nodes_used']
+        modified_ovrcluster_nodes += nodes_for_project * (hours_run / 24)
+
     ovrcluster_message = row_format.format(
         "OvrCluster",
         f"{average_percentage_overall_gpu_util:.0f}%",
-        str(total_nodes),
+        str(modified_ovrcluster_nodes),
         "24"
     )
     messages.append(ovrcluster_message)
-
     for result in project_info:
         # Only take the first 10 results
         message = row_format.format(
