@@ -159,7 +159,9 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         dollars_wasted = (1 - ((a - 48) / 350)) * b / a * 1.3 * total_gpu_usage_time_hours[project_name]
         dollars_wasted_total += dollars_wasted
         # Save the project information
-        if project_name != "music_gen":
+        if '_' not in project_name:
+            if not project_name:
+                project_name = "idle"
             project_info.append({
 
                 'project_name': project_name,
@@ -224,7 +226,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
             result['project_name'][:11],  # Truncate project_name to 15 characters
             f"{result['percentage_gpu_usage']:.0f}%",  # No decimal places for percentage
             f"{result['nodes_used']}",
-            f"{int(result['total_gpu_usage_time_hours'][result['project_name']]):.0f}"  # No decimal places for hours
+            f"{result['total_gpu_usage_time_hours'].get(result['project_name'], 0):.2f} hours"  # No decimal places for hours
         )
         messages.append(message)
     overall_report = f"*LAST OVERALL 24H CW GPU UTILISATION REPORT*\n\n"
@@ -310,7 +312,7 @@ def main(user_id=None):
             result['project_name'],
             f"{result['percentage_gpu_usage']:.2f}%",
             f"{result['nodes_used']}",
-            f"{result['total_gpu_usage_time_hours'][result['project_name']]:.2f} hours"
+            f"{result['total_gpu_usage_time_hours'].get(result['project_name'], 0):.2f} hours"
         ])
 
     # Open the existing Google Sheets file and fill it with new data
