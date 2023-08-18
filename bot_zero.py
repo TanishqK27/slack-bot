@@ -322,7 +322,7 @@ def main(user_id=None):
             result['project_name'],
             f"{result['percentage_gpu_usage']:.2f}%",
             f"{result['nodes_used']}",
-            f"{result['total_gpu_usage_time_hours'].get(result['project_name'], 0):.2f} hours"
+            f"{result['total_gpu_usage_time_hours'].get(result['project_name'], 0):.0f}"
         ])
 
     # Open the existing Google Sheets file and fill it with new data
