@@ -159,7 +159,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         dollars_wasted = (1 - ((a - 48) / 350)) * b / a * 1.3 * total_gpu_usage_time_hours[project_name]
         dollars_wasted_total += dollars_wasted
         # Save the project information
-        if project_name != "music_gen":
+        if '_' not in project_name:
             project_info.append({
 
                 'project_name': project_name,
