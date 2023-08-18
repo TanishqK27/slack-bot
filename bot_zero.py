@@ -217,7 +217,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         hours_run = result['total_gpu_usage_time_hours'].get(result['project_name'], 0)
         nodes_for_project = result['nodes_used']
         modified_ovrcluster_nodes += nodes_for_project * (hours_run / 24)
-        modified_ovrcluster_nodes = modified_ovrcluster_nodes*1
+        modified_ovrcluster_nodes = (modified_ovrcluster_nodes*1)*(413/1000)
 
 
     ovrcluster_message = row_format.format(
