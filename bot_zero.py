@@ -160,6 +160,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         dollars_wasted_total += dollars_wasted
         # Save the project information
         if '_' not in project_name:
+            if not project_name:
+                project_name = "idle"
             project_info.append({
 
                 'project_name': project_name,
