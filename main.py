@@ -14,9 +14,13 @@ from bot_three import main as main3
 from bot_four import main as main4
 from bot_five import main as main5
 from bot_six import main as main6
-
+from flask_apscheduler import APScheduler
 load_dotenv()
 app = Flask(__name__)
+
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 
 @app.route('/slack/help', methods=['POST'])
@@ -60,6 +64,16 @@ def slack_0():
 
     return make_response("Request received and is being processed...", 202)
 
+def daily_task():
+    # Start a new thread to perform GPU usage calculations
+    thread = threading.Thread(target=main0)
+    thread.start()
+
+@scheduler.task('cron', id='daily_task_id', hour=15, minute=0)
+def scheduled_task():
+    daily_task()
+
+
 @app.route('/slack/1', methods=['POST'])
 def slack_1():
     # Validate the request from Slack
@@ -74,6 +88,7 @@ def slack_1():
         return make_response("Invalid request", 403)
 
     user_id = request.form.get('user_id')
+    daily_task()
 
     # Start a new thread to perform GPU usage calculations and pass the user_id
     thread = threading.Thread(target=main1, args=(user_id,))
