@@ -75,57 +75,46 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
     waste_rate_total = 0
     dollars_wasted_total = 0
     modified_ovrcluster_nodes = 0
-    percentage_total = 0
     project_info = []
-    total_gpu_usage_sum = {}  # To store the total GPU usage for each project in sum_response
-    total_data_points = {}  # To store the total number of data points for each project in sum_response
-    avg_gpu_usage = {}  # To store the average GPU usage for each project in avg_response
+    total_gpu_usage_sum = {}
+    total_data_points = {}
+    avg_gpu_usage = {}
     total_gpu_usage_time_hours = {}
     overall_percentage_total = 0
     total_nodes = 0
     overall_gpu_sum = 0
     overall_gpu_count = 0
-    # To store the information for each project
 
-    # Calculate average GPU usage and total GPU usage for all data points in avg_response and sum_response respectively
+
+
     for series_data in avg_response['series']:
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
         pointlist = series_data['pointlist']
         if project_name == 'music_gen':
             continue
-
-        total_gpu_sum = 0  # To store the total GPU usage for the project
-        num_points = len(pointlist)  # To store the total number of data points for the project
-
+        total_gpu_sum = 0
+        num_points = len(pointlist)
         for point in pointlist:
             if hasattr(point, 'value') and point.value[1] is not None:
                 total_gpu_sum += point.value[1]
-
-        # Calculate the average GPU usage for the project
         if num_points > 0:
             avg_gpu_usage[project_name] = total_gpu_sum / num_points
         else:
             avg_gpu_usage[project_name] = 0
 
-    # a# Calculate and print the total GPU usage and average GPU usage for each project in sum_response
+
     for series_data in sum_response['series']:
         project_name = series_data['expression'].split('{project:')[1].split(',')[0]
-
         pointlist = series_data['pointlist']
         if project_name == 'music_gen':
             continue
-
         total_gpu_usage_sum[project_name] = 0
         total_data_points[project_name] = 0
-
         for point in pointlist:
             if hasattr(point, 'value') and point.value[1] is not None:
                 total_gpu_usage_sum[project_name] += point.value[1]  # Add the second value (GPU usage) to the total
                 total_data_points[project_name] += 1  # Increment the number of data points
-
-        # Calculate the total GPU usage time in hours for each project
         project_pointlist = []
-
         for point in pointlist:
             if hasattr(point, 'value') and point.value[1] is not None:
                 timestamp_ms = point.value[0]
@@ -134,37 +123,40 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
                 value = point.value[1]
                 formatted_time = timestamp_datetime.strftime('%Y-%m-%d %H:%M:%S')  # Format the datetime as desired
                 project_pointlist.append({'timestamp': formatted_time, 'value': value})
-
         total_gpu_usage_time_hours[project_name] = 0
-
         for i in range(len(project_pointlist)):
             if project_pointlist[i]['value'] is not None:
                 total_gpu_usage_time_hours[
                     project_name] += 5  # Add 5 minutes to the total GPU usage time for each valid point
 
-        # Convert total minutes to hours (with decimals if not a whole number)
-
         total_gpu_usage_time_hours[project_name] /= 60
+
         percentage_gpu_usage = (avg_gpu_usage[project_name] - 48) / 3.
 
         percentage_gpu_usage = abs(percentage_gpu_usage)
-        nodes_used = (total_gpu_usage_sum[project_name] / total_data_points[project_name]) / (
-                avg_gpu_usage[project_name] * 8)
+
+        nodes_used = (total_gpu_usage_sum[project_name] / total_data_points[project_name]) / (avg_gpu_usage[project_name] * 8)
+
         nodes_used = round(nodes_used)
 
         total_nodes += nodes_used
 
         percentage_total = percentage_gpu_usage * nodes_used
+
         overall_percentage_total += percentage_total
 
         a = (avg_gpu_usage[project_name])
+
         b = (total_gpu_usage_sum[project_name] / total_data_points[project_name])
-        # Calculate Waste Rate
+
         waste_rate = (1 - ((a - 48) / 350)) * b / a * 1.3
+
         waste_rate_total += waste_rate
+
         dollars_wasted = (1 - ((a - 48) / 350)) * b / a * 1.3 * total_gpu_usage_time_hours[project_name]
+
         dollars_wasted_total += dollars_wasted
-        # Save the project information
+
         if '_' not in project_name:
             if not project_name:
                 project_name = "idle"
@@ -179,6 +171,7 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
                 'waste_rate': waste_rate,
                 'dollars_wasted': dollars_wasted
             })
+
 
     for series_data in overall_response['series']:
         pointlist = series_data['pointlist']
@@ -199,22 +192,17 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
 
     average_waste_rate = waste_rate_total / num_projects
 
-    # Sort the projects by dollars wasted in descending order
 
     project_info.sort(key=lambda x: x['dollars_wasted'], reverse=True)
     message_data = project_info.copy()
 
-    # Get the maximum length of project_name for pretty formatting
     max_name_length = max(len(result['project_name']) for result in project_info)
 
-    # Define the format string for the table rows, taking into account the max_name_length
     row_format = "{:<11} | {:>4} | {:>3} | {:>2}"
 
-    # Create the table header using the same row format
     header = row_format.format('Project Name', '%GPU', 'Nod', 'Hr')
     header += "\n" + "-" * len(header)  # Add a line under the header
 
-    # Format the project information
     messages = [header]
 
 
@@ -232,6 +220,8 @@ def calculate_gpu_usage_info(avg_response, sum_response, overall_response):
         "24"
     )
     messages.append(ovrcluster_message)
+
+
     for result in project_info:
         # Only take the first 10 results
         message = row_format.format(
