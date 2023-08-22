@@ -14,13 +14,10 @@ from bot_three import main as main3
 from bot_four import main as main4
 from bot_five import main as main5
 from bot_six import main as main6
-from flask_apscheduler import APScheduler
+
 load_dotenv()
 app = Flask(__name__)
 
-scheduler = APScheduler()
-scheduler.init_app(app)
-scheduler.start()
 
 
 @app.route('/slack/help', methods=['POST'])
@@ -69,9 +66,7 @@ def daily_task():
     thread = threading.Thread(target=main0)
     thread.start()
 
-@scheduler.task('cron', id='daily_task_id', hour=15, minute=0)
-def scheduled_task():
-    daily_task()
+
 
 
 @app.route('/slack/1', methods=['POST'])
