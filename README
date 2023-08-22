@@ -1,0 +1,40 @@
+
+#Slack Cluster Bot
+##Project Overview
+
+This bot is designed to integrate DataDog metrics with Slack, so that a daily report of GPU usage of all projects is published, along with various slash commands which allow users to filter reports by cluster. The backend is powered by a Flask web server hosted on Heroku.
+
+##System Architecture
+
+DataDog: This acts as the primary data source for all metrics used.
+Flask Web Server on Heroku: The Flask application processes incoming requests from Slack and interacts with the DataDog API.
+Slack API: Allows interaction with Slack channels and users, especially through slash commands.
+
+##The Data
+
+The bot pulls all the data via metrics through the DataDog API. An example of the metric used for all data:
+
+"sum:dcgm.power_usage{availability-zone:*,partition:*} by {project}"
+
+For choosing different clusters the availability-zone: is changed (eg. availability-zone:sagemaker2 for SM2 only), and for choosing different partitions the partition: is changed (eg. partition:g80 for g80 SM2 cluster only).
+
+This data is then used to create a table with Project Name, GPU Usage %, Number of Nodes Used and Hours Run, for each project. The maths behind how these numbers are made is based on the calculations found on the GPU Cluster Utilization dev richard dashboard - essentially recreating the Projects table from that dashboard in a quick and easy overview.
+
+The data available encompasses the following clusters:
+
+SageMaker 2, SageMaker 2 (g40), SageMaker 2 (g80), External Cluster and CoreWeave.
+
+##Usage
+
+The bot can be placed on any Slack Channel, by changing SLACK_CHANNEL = to the channel of choice.
+
+The following Slash Commands are available:
+
+/help: Cluster Bot User Guide
+/0: Last 24H Report for all projects
+/1: Last 24H Report for all internal projects on SM2
+/2: Last 24H Report for all internal projects on SM2 (g40)
+/3: Last 24H Report for all internal projects on SM2 (g80)
+/4: Last 24H Report for all external projects on External Cluster
+/5: Last 24H Report for ClipDrop inference on CW Cluster
+/6: Last 24H Report for On Demand Cluster Usage
